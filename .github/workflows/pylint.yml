@@ -61,3 +61,24 @@ jobs:
           key: venv-${{ runner.os }}-bullseye-3.10.2-v2-${{ hashFiles('**/poetry.lock') }}
 
       - run: python -m mypy src
+
+
+  Test:
+    needs: [Pylint, Type]
+    runs-on: ubuntu-latest
+    container: python:3.10.2-slim-bullseye
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: /usr/local/lib/python3.10/site-packages
+          key: venv-${{ runner.os }}-bullseye-3.10.2-v2-${{ hashFiles('**/poetry.lock') }}
+
+      - run: |
+          python -m coverage run -m pytest
+          python -m coverage xml
+      - run: apt update && apt install -y git
+      - name: Code Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV }}
