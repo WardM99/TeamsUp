@@ -31,9 +31,9 @@ jobs:
   Pylint:
     needs: [Dependencies]
     runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          python-version: ["3.10"]
+    strategy:
+      matrix:
+        python-version: ["3.10"]
     steps:
     - uses: actions/checkout@v3
     - name: Analysing the code with pylint
