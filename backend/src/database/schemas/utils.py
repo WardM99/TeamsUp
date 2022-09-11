@@ -1,6 +1,6 @@
 """utils for the schemas"""
 # pylint: disable=too-few-public-methods
-from humps import camelize
+from humps import camelize # type: ignore
 from pydantic import BaseModel
 
 
