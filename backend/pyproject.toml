@@ -25,3 +25,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 plugins = ["sqlalchemy.ext.mypy.plugin"]
+
+[[tool.mypy.overrides]]
+module = "sqlalchemy_utils"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "jose.*"
+ignore_missing_imports = true
