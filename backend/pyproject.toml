@@ -22,3 +22,6 @@ pylint = "^2.15.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+plugins = ["sqlalchemy.ext.mypy.plugin"]
