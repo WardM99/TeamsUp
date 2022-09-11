@@ -16,7 +16,7 @@ class Player(Base):
 
 class Team(Base):
     """The data of teams"""
-    __tablename__  = "teams"
+    __tablename__ = "teams"
 
     team_id = Column(Integer, primary_key=True, index=True)
     game_id = Column(Integer, ForeignKey("games.game_id"))
@@ -28,7 +28,7 @@ class Team(Base):
 
 class Game(Base):
     """The data of a game that has been played or is playing"""
-    __tablename__  = "games"
+    __tablename__ = "games"
 
     game_id = Column(Integer, primary_key=True, index=True)
     round_one_done: bool = Column(Boolean, nullable=False, default=False)
