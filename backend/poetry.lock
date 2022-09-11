@@ -292,6 +292,14 @@ dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
 
 [[package]]
+name = "pyhumps"
+version = "3.7.3"
+description = "🐫  Convert strings (and dictionary keys) between snake case, camel case and pascal case in Python. Inspired by Humps for Node"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pylint"
 version = "2.15.0"
 description = "python code static checker"
@@ -459,7 +467,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "2ce101b77b0cf386748de48a105c35463bea858f46082499db125ecf7c241ced"
+content-hash = "635e794b6d8253a32757863fd2846779426ea641cf0a4d05c0e35874c34ef74c"
 
 [metadata.files]
 alembic = [
@@ -789,6 +797,10 @@ pydantic = [
     {file = "pydantic-1.10.2-cp39-cp39-win_amd64.whl", hash = "sha256:c1ba1afb396148bbc70e9eaa8c06c1716fdddabaf86e7027c5988bae2a829ab6"},
     {file = "pydantic-1.10.2-py3-none-any.whl", hash = "sha256:1b6ee725bd6e83ec78b1aa32c5b1fa67a3a65badddde3976bca5fe4568f27709"},
     {file = "pydantic-1.10.2.tar.gz", hash = "sha256:91b8e218852ef6007c2b98cd861601c6a09f1aa32bbbb74fab5b1c33d4a1e410"},
+]
+pyhumps = [
+    {file = "pyhumps-3.7.3-py3-none-any.whl", hash = "sha256:8cf9503f71be250a1ec2c0af997309e6360ad4daa343acd7faafde54cce36469"},
+    {file = "pyhumps-3.7.3.tar.gz", hash = "sha256:6eec3741cf917009adb16f6b6b883429edb1c6286531bd9f3977ba41938b0a09"},
 ]
 pylint = [
     {file = "pylint-2.15.0-py3-none-any.whl", hash = "sha256:4b124affc198b7f7c9b5f9ab690d85db48282a025ef9333f51d2d7281b92a6c3"},

@@ -12,6 +12,7 @@ uvicorn = "^0.18.3"
 alembic = "^1.8.1"
 coverage = "^6.4.4"
 SQLAlchemy = "^1.4.41"
+pyhumps = "^3.7.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -20,13 +21,18 @@ mypy = "^0.971"
 pylint = "^2.15.0"
 sqlalchemy2-stubs = "^0.0.2a27"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.mypy]
 plugins = ["sqlalchemy.ext.mypy.plugin"]
 
 [[tool.mypy.overrides]]
 module = "sqlalchemy_utils"
 ignore_errors = true
+
+[tool.pylint.master]
+extension-pkg-whitelist = "pydantic"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
