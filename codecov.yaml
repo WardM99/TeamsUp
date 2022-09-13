@@ -10,4 +10,4 @@ coverage:
   precision: 5
 
 ignore:
-  - "./tests/*"
+  - "backend/tests"
