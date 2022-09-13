@@ -19,7 +19,7 @@ async def get_player(database: AsyncSession, player_id: int) -> Player:
     """Returns a player"""
     query = select(Player).where(Player.player_id == player_id)
     result = await database.execute(query)
-    return result.unique().scalars().all()
+    return result.unique().scalars().one()
 
 
 async def delete_player(database: AsyncSession, player: Player) -> None:
