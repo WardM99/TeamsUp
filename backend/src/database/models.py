@@ -20,10 +20,10 @@ class Team(Base):
 
     team_id = Column(Integer, primary_key=True, index=True)
     game_id = Column(Integer, ForeignKey("games.game_id"))
-    team_name: str = Column(Text, nulable=False, unique=False)
+    team_name: str = Column(Text, nullable=False, unique=False)
 
-    players: list[Player] = \
-        relationship("Player", back_populates="teams", cascade="all, delete-orphan")
+    #players: list[Player] = \
+    #    relationship("Player", back_populates="teams", cascade="all, delete-orphan")
 
 
 class Game(Base):
@@ -35,4 +35,4 @@ class Game(Base):
     round_two_done: bool = Column(Boolean, nullable=False, default=False)
     round_three_done: bool = Column(Boolean, nullable=False, default=False)
 
-    teams: list[Team] = relationship("Team", back_populates="games", cascade="all, delete-orphan")
+    #teams: list[Team] = relationship("Team", back_populates="games", cascade="all, delete-orphan")
