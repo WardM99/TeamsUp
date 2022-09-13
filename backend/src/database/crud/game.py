@@ -17,4 +17,11 @@ async def get_game(database: AsyncSession, game_id: int) -> Game:
     """Returns a game"""
     query = select(Game).where(Game.game_id == game_id)
     result = await database.execute(query)
+    return result.unique().scalars().one()
+
+
+async def get_all_games(database: AsyncSession) -> list[Game]:
+    """returns all games"""
+    query = select(Game)
+    result = await database.execute(query)
     return result.unique().scalars().all()

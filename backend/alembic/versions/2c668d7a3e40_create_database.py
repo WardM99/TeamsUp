@@ -1,8 +1,8 @@
 """create database
 
-Revision ID: 9d088dc429e6
+Revision ID: 2c668d7a3e40
 Revises: 
-Create Date: 2022-09-13 17:05:50.453175
+Create Date: 2022-09-13 18:11:49.083546
 
 """
 # pylint: disable-all
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9d088dc429e6'
+revision = '2c668d7a3e40'
 down_revision = None
 branch_labels = None
 depends_on = None
