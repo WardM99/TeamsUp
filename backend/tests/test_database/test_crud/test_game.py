@@ -1,6 +1,7 @@
 """Tests for a the crud actions of game"""
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import NoResultFound
 
 from src.database.models import Game
 from src.database.crud.game import (
@@ -27,6 +28,12 @@ async def test_get_game(database_with_data: AsyncSession):
     assert game.round_one_done is False
     assert game.round_two_done is False
     assert game.round_three_done is False
+
+
+async def test_get_game_no_game(database_with_data: AsyncSession):
+    """Test get error when no games found"""
+    with pytest.raises(NoResultFound):
+        await get_game(database_with_data, 2)
 
 
 async def test_get_all_games(database_with_data: AsyncSession):
