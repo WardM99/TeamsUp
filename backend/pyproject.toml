@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.83.0"
+fastapi = "^0.84.0"
 uvicorn = "^0.18.3"
 alembic = "^1.8.1"
 coverage = "^6.4.4"
