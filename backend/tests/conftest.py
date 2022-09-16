@@ -1,10 +1,16 @@
 """Pytest configuration file with fixtures"""
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Generator
+from unittest.mock import AsyncMock
+
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
+from httpx import AsyncClient
 from alembic import config, command
 from src.database.database import engine
 
+from src.app.app import app
+from src.app.utils.dependencies import get_http_session
+from src.database.database import get_session
 
 
 @pytest.fixture(scope="session")
@@ -40,3 +46,31 @@ async def database_session() -> AsyncGenerator[AsyncSession, None]:
         await transaction.rollback()
 
     await connection.close()
+
+
+@pytest.fixture
+def aiohttp_session() -> AsyncMock:
+    """Fixture to get a mock aiohttp.ClientSession instance
+    Used to replace the dependency of the TestClient
+    """
+    yield AsyncMock()
+
+
+@pytest.fixture
+def test_client(database_session: AsyncSession, aiohttp_session: AsyncMock) -> AsyncClient:
+    """Fixture to create a testing version of our main application"""
+
+    def override_get_session() -> AsyncGenerator[AsyncSession, None]:
+        """Inner function to override the Session used in the app
+        A session provided by a fixture will be used instead
+        """
+        yield database_session
+
+    def override_get_http_session() -> Generator[AsyncMock, None, None]:
+        """Inner function to override the ClientSession used in the app"""
+        yield aiohttp_session
+
+    # Replace get_session with a call to this method instead
+    app.dependency_overrides[get_session] = override_get_session
+    app.dependency_overrides[get_http_session] = override_get_http_session
+    return AsyncClient(app=app, base_url="http://test")
