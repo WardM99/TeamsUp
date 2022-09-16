@@ -7,7 +7,8 @@ from src.database.models import Player, Game, Team
 from src.database.crud.player import (get_player,
                                       get_players_game,
                                       get_players_team,
-                                      delete_player)
+                                      delete_player,
+                                      create_player)
 from src.database.crud.game import get_game
 from src.database.crud.team import get_team
 
@@ -88,3 +89,15 @@ async def test_delete_player(database_with_data: AsyncSession):
     await delete_player(database_with_data, player)
     with pytest.raises(NoResultFound):
         await get_player(database_with_data, 5, team1)
+
+
+async def test_create_player(database_with_data: AsyncSession):
+    """Test create_player"""
+    game: Game = await get_game(database_with_data, 1)
+    team1: Team = await get_team(database_with_data, 1, game)
+    player_new: Player = await create_player(database_with_data, "Joske", team1)
+    players_team1: list[Player] = await get_players_team(database_with_data, team1)
+    assert len(players_team1) == 4
+    player: Player = await get_player(database_with_data, player_new.player_id, team1)
+    assert player.name == player_new.name
+    assert player.team == player_new.team

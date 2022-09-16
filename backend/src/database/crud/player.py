@@ -4,10 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models import Player, Game, Team
 
-async def create_player(database: AsyncSession, team_id: int, name: str) -> Player:
+async def create_player(database: AsyncSession, name: str, team: Team) -> Player:
     """Creates a new player"""
     player: Player = Player(
-        team_id = team_id,
+        team=team,
         name=name
     )
     database.add(player)
