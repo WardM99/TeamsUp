@@ -7,8 +7,7 @@ from src.database.models import Game
 from src.database.crud.game import (
     get_all_games,
     get_game,
-    create_game,
-    delete_game
+    create_game
 )
 
 @pytest.fixture
@@ -53,11 +52,3 @@ async def test_create_game(database_with_data: AsyncSession):
     assert game.round_one_done is game_new.round_one_done
     assert game.round_two_done is game_new.round_two_done
     assert game.round_three_done is game_new.round_three_done
-
-
-async def test_delete_game(database_with_data: AsyncSession):
-    """Test delete_player"""
-    game: Game = await get_game(database_with_data, 1)
-    await delete_game(database_with_data, game)
-    with pytest.raises(NoResultFound):
-        await get_game(database_with_data, 1)
