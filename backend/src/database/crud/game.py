@@ -25,3 +25,9 @@ async def get_all_games(database: AsyncSession) -> list[Game]:
     query = select(Game)
     result = await database.execute(query)
     return result.unique().scalars().all()
+
+
+async def delete_game(database: AsyncSession, game: Game) -> None:
+    """Deletes a game"""
+    await database.delete(game)
+    await database.commit()

@@ -81,6 +81,7 @@ async def test_get_players_team(database_with_data: AsyncSession):
 
 
 async def test_delete_player(database_with_data: AsyncSession):
+    """Test delete_player"""
     game: Game = await get_game(database_with_data, 1)
     team1: Team = await get_team(database_with_data, 1, game)
     player: Player = await get_player(database_with_data, 5, team1)

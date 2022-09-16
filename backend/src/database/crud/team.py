@@ -25,3 +25,9 @@ async def get_all_teams_from_game(database: AsyncSession, game: Game) -> list[Te
     query = select(Team).where(Team.game == game)
     result = await database.execute(query)
     return result.unique().scalars().all()
+
+
+async def delete_team(database: AsyncSession, team: Team) -> None:
+    """Deletes a team"""
+    await database.delete(team)
+    await database.commit()
