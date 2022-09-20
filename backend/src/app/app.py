@@ -2,8 +2,8 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from .routers import games_router
 from src.app.exceptions.handler import install_handlers
+from .routers import games_router
 
 
 app = FastAPI(
