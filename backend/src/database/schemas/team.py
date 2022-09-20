@@ -15,5 +15,4 @@ class ReturnTeams(OrmModel):
 
 class InputTeam(BaseModel):
     """Input details of a team"""
-    game_id: int
     team_name: str

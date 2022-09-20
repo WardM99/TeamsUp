@@ -30,5 +30,5 @@ async def make_game(database: AsyncSession = Depends(get_session)):
 @games_router.get("/{game_id}", response_model=ReturnGame, status_code=status.HTTP_200_OK)
 async def get_game(game_id: int, database: AsyncSession = Depends(get_session)):
     """Get a game by id"""
-    return await logic_get_game_by_id(database, game_id)
+    return await logic_get_game_by_id(game_id, database)
  

@@ -11,6 +11,7 @@ async def logic_get_all_teams(database: AsyncSession, game: Game) -> list[Team]:
 
 async def logic_make_new_team(database: AsyncSession, game: Game, team_name: str) -> Team:
     """The logic to create a new team"""
+    print(team_name)
     return await create_team(database, team_name, game)
 
 
