@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from src.app.exceptions.handler import install_handlers
 from .routers import games_router
 
 
@@ -18,6 +19,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+install_handlers(app)
 
 
 # Include routes
