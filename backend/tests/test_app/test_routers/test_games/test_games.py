@@ -8,16 +8,18 @@ from src.database.models import Game
 async def database_with_data(database_session: AsyncSession):
     """A function to fill the database with fake data that can easly be used when testing"""
     # Game
-    game: Game = Game()
-    database_session.add(game)
+    game1: Game = Game()
+    game2: Game = Game()
+    database_session.add(game1)
+    database_session.add(game2)
     await database_session.commit()
 
     return database_session
 
 
-async def test_app_hello_world(database_with_data: AsyncSession, test_client: AsyncClient):
-    """Test hello world"""
-    #get_request = await test_client.get("/games")
-    #data = get_request.json()
-    #print(data)
-    #assert False
+async def test_get_all_games(database_with_data: AsyncSession, test_client: AsyncClient):
+    """Test get all games"""
+    get_request = await test_client.get("/games")
+    data = get_request.json()
+    print(data)
+    assert len(data["games"]) == 2
