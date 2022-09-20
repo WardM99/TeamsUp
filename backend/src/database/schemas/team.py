@@ -9,6 +9,10 @@ class ReturnTeam(OrmModel):
     team_name: str
 
 
+class ReturnTeams(OrmModel):
+    """Represents a list of teams"""
+    teams: list[ReturnTeam]
+
 class InputTeam(BaseModel):
     """Input details of a team"""
     game_id: int
