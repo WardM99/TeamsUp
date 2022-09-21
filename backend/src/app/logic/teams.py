@@ -18,6 +18,10 @@ async def logic_make_new_team(database: AsyncSession, game: Game, team_name: str
     return await create_team(database, team_name, game)
 
 
-async def logic_get_team_by_id(database: AsyncSession = Depends(get_session), game: Game = Depends(logic_get_game_by_id), team_id: int = 0) -> Team:
+async def logic_get_team_by_id(
+    database: AsyncSession = Depends(get_session),
+    game: Game = Depends(logic_get_game_by_id),
+    team_id: int = 0
+) -> Team:
     """The logic to get a team by id"""
     return await get_team(database, team_id, game)

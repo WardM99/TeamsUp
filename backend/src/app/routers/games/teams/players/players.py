@@ -4,7 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.database.database import get_session
-from src.app.logic.players import logic_get_all_players, logic_make_new_player, logic_get_player_by_id
+from src.app.logic.players import (logic_get_all_players,
+                                   logic_make_new_player,
+                                   logic_get_player_by_id)
 from src.app.logic.teams import logic_get_team_by_id
 from src.database.schemas.player import ReturnPlayer, ReturnPlayers, InputPlayer
 from src.database.models import Team, Player
@@ -17,7 +19,7 @@ async def get_players(
     team: Team = Depends(logic_get_team_by_id)
 ):
     """Get all players of a team"""
-    players = await logic_get_all_players(database, team)
+    players: list[Player] = await logic_get_all_players(database, team)
     return ReturnPlayers(players=players)
 
 

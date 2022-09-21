@@ -11,7 +11,7 @@ class ReturnPlayer(OrmModel):
 
 class ReturnPlayers(OrmModel):
     """Represents a list of players"""
-    players: list[ReturnPlayer]    
+    players: list[ReturnPlayer]
 
 
 class InputPlayer(BaseModel):
