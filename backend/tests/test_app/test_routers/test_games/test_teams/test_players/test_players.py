@@ -44,7 +44,7 @@ async def test_get_all_players_of_teams(database_with_data: AsyncSession, test_c
     data = get_request.json()
     assert len(data["players"]) == 3
     for i in range(1,4):
-        player = data[i-1]
+        player = data["players"][i-1]
         assert player["name"] == f"Team1Player{i}"
 
     get_request = await test_client.get("/games/1/teams/2/players")
@@ -52,7 +52,7 @@ async def test_get_all_players_of_teams(database_with_data: AsyncSession, test_c
     data = get_request.json()
     assert len(data["players"]) == 3
     for i in range(1,4):
-        player = data[i-1]
+        player = data["players"][i-1]
         assert player["name"] == f"Team2Player{i}"
 
 
