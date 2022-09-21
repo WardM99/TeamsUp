@@ -8,8 +8,11 @@ from src.app.logic.teams import logic_get_all_teams, logic_make_new_team, logic_
 from src.app.logic.games import logic_get_game_by_id
 from src.database.schemas.team import ReturnTeams, ReturnTeam, InputTeam
 from src.database.models import Game, Team
+from src.app.routers.games.teams.players.players import players_router
 
 teams_router = APIRouter(prefix="/teams")
+
+teams_router.include_router(players_router, prefix="/{team_id}")
 
 @teams_router.get("", response_model=ReturnTeams, status_code=status.HTTP_200_OK)
 async def get_teams(
