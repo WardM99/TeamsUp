@@ -20,12 +20,13 @@ def tables():
     and drop it again afterwards
     """
     alembic_config: config.Config = config.Config('alembic.ini')
+    command.downgrade(alembic_config, 'base')
     command.upgrade(alembic_config, 'head')
     yield
     command.downgrade(alembic_config, 'base')
 
 @pytest.fixture
-async def database_session() -> AsyncGenerator[AsyncSession, None]:
+async def database_session(tables) -> AsyncGenerator[AsyncSession, None]:
     """
     Fixture to create a session for every test, and rollback
     all the transactions so that each tests starts with a clean db

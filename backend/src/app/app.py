@@ -1,8 +1,12 @@
 """Startup of FastAPI application"""
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from alembic import config, script
+from alembic.runtime import migration
 
 from src.app.exceptions.handler import install_handlers
+from src.database.database import engine
+from src.database.exceptions import PendingMigrationsException
 from .routers import games_router
 
 
@@ -24,6 +28,21 @@ install_handlers(app)
 
 # Include routes
 app.include_router(games_router)
+
+
+@app.on_event('startup')
+async def init_database(): # pragma: no cover
+    """Create all tables of database"""
+    alembic_config: config.Config = config.Config('alembic.ini')
+    alembic_script: script.ScriptDirectory = script.ScriptDirectory.from_config(alembic_config)
+    async with engine.begin() as conn:
+        revision: str = await conn.run_sync(
+            lambda sync_conn: migration.MigrationContext.configure(sync_conn).get_current_revision()
+        )
+        alembic_head: str = alembic_script.get_current_head()
+        if revision != alembic_head:
+            raise PendingMigrationsException
+
 
 @app.get("/")
 async def root():
