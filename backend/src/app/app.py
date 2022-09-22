@@ -1,5 +1,5 @@
 """Startup of FastAPI application"""
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from starlette.middleware.cors import CORSMiddleware
 from alembic import config, script
 from alembic.runtime import migration
@@ -7,6 +7,7 @@ from alembic.runtime import migration
 from src.app.exceptions.handler import install_handlers
 from src.database.database import engine
 from src.database.exceptions import PendingMigrationsException
+from src.app.logic.players import require_player
 from .routers import games_router
 
 
@@ -44,7 +45,8 @@ async def init_database(): # pragma: no cover
             raise PendingMigrationsException
 
 
-@app.get("/")
-async def root():
+@app.get("/",)
+async def root(user = Depends(require_player)):
     """give a Hello World message"""
+    print(user)
     return {"message": "Hello World"}
