@@ -10,7 +10,7 @@ from src.app.logic.players import (logic_get_all_players,
                                    logic_generate_token)
 from src.app.logic.teams import logic_get_team_by_id
 from src.database.schemas.player import ReturnPlayer, ReturnPlayers, InputPlayer, Token
-from src.database.models import Team, Player
+from src.database.models import Team
 
 players_router = APIRouter(prefix="/players")
 
@@ -30,8 +30,9 @@ async def make_player(
     team: Team = Depends(logic_get_team_by_id)
 ):
     """Make a new player for this team"""
-    player: Player = await logic_make_new_player(database, team, input_player.name)
-    return await logic_generate_token(player)
+    return await logic_generate_token(
+        await logic_make_new_player(database, team, input_player.name)
+    )
     #return await logic_make_new_player(database, team, input_player.name)
 
 
