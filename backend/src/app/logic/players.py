@@ -1,18 +1,12 @@
 """Logic of players route"""
-<<<<<<< HEAD
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-=======
->>>>>>> master
 from datetime import timedelta, datetime
 import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.database.crud.player import get_player, get_players_team, create_player
 from src.database.schemas.player import Token
-<<<<<<< HEAD
 from src.database.database import get_session
-=======
->>>>>>> master
 from src.database.models import Team, Player
 
 async def logic_get_all_players(database: AsyncSession, team: Team) -> list[Player]:
