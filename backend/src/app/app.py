@@ -44,7 +44,7 @@ async def init_database(): # pragma: no cover
             raise PendingMigrationsException
 
 
-@app.get("/")
+@app.get("/",)
 async def root():
     """give a Hello World message"""
     return {"message": "Hello World"}

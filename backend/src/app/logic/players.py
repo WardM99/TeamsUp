@@ -1,9 +1,12 @@
 """Logic of players route"""
 from datetime import timedelta, datetime
-import jwt
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.database.crud.player import get_player, get_players_team, create_player
+from src.database.crud.player import get_player, get_players_team, create_player, get_player_by_id
 from src.database.schemas.player import Token
+from src.database.database import get_session
 from src.database.models import Team, Player
 
 async def logic_get_all_players(database: AsyncSession, team: Team) -> list[Player]:
@@ -31,6 +34,9 @@ async def logic_generate_token(player: Player) -> Token:
     )
 
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="")
+
+
 def create_token(player: Player):
     """Create an access token"""
     data: dict = {"type": "access", "sub": str(player.player_id)}
@@ -40,3 +46,28 @@ def create_token(player: Player):
         "WPll6MnvmR1NLf7x6jszNNXlQUwhqpKIyIUyQdg3zio7ngodp82FRbh1JM4UO5qZ",
         algorithm="HS256"
     )
+
+
+async def get_user_from_access_token(
+    database: AsyncSession = Depends(get_session),
+    token: str = Depends(oauth2_scheme)
+) -> Player:
+    """Test"""
+    payload = jwt.decode(
+        token,
+        "WPll6MnvmR1NLf7x6jszNNXlQUwhqpKIyIUyQdg3zio7ngodp82FRbh1JM4UO5qZ",
+        algorithms="HS256"
+    )
+    user_id: int | None = payload.get("sub")
+    type_in_token: int | None = payload.get("type")
+
+    if user_id is None or type_in_token is None:
+        raise JWTError()
+
+    player = await get_player_by_id(database, int(user_id))
+    return player
+
+
+async def require_player(player: Player = Depends(get_user_from_access_token)) -> Player:
+    """Test"""
+    return player

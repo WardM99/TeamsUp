@@ -17,6 +17,7 @@ aiosqlite = "^0.17.0"
 httpx = "^0.23.0"
 aiohttp = "^3.8.3"
 PyJWT = "^2.5.0"
+python-jose = "^3.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -36,6 +37,10 @@ ignore_errors = true
 [[tool.mypy.overrides]]
 module = "pyhumps"
 ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "jose.*"
+ignore_missing_imports = true
 
 [tool.pylint.master]
 extension-pkg-whitelist = "pydantic"
