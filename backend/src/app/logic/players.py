@@ -1,10 +1,10 @@
 """Logic of players route"""
+from datetime import timedelta, datetime
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-from datetime import timedelta, datetime
-import jwt
+from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.database.crud.player import get_player, get_players_team, create_player
+from src.database.crud.player import get_player, get_players_team, create_player, get_player_by_id
 from src.database.schemas.player import Token
 from src.database.database import get_session
 from src.database.models import Team, Player
@@ -50,25 +50,19 @@ def create_token(player: Player):
 
 async def get_user_from_access_token(database: AsyncSession = Depends(get_session), token: str = Depends(oauth2_scheme))->Player:
     """Test"""
-    try:
-        payload = jwt.decode(
-            token,
-            "WPll6MnvmR1NLf7x6jszNNXlQUwhqpKIyIUyQdg3zio7ngodp82FRbh1JM4UO5qZ",
-            algorithms="HS256"
-        )
-        user_id: int | None = payload.get("sub")
-        type_in_token: int | None = payload.get("type")
+    payload = jwt.decode(
+        token,
+        "WPll6MnvmR1NLf7x6jszNNXlQUwhqpKIyIUyQdg3zio7ngodp82FRbh1JM4UO5qZ",
+        algorithms="HS256"
+    )
+    user_id: int | None = payload.get("sub")
+    type_in_token: int | None = payload.get("type")
 
-        #if user_id is None or type_in_token is None:
-        #    raise InvalidCredentialsException()
-        #try:
-        #    player = await get_player(database, int(user_id))
-        #except sqlalchemy.exc.NoResultFound as not_found:
-        #    raise InvalidCredentialsException() from not_found
-        #return player
-    except Exception:
-        print("OEPSIE")
-    return None
+    if user_id is None or type_in_token is None:
+        raise JWTError()
+
+    player = await get_player_by_id(database, int(user_id))
+    return player
 
 
 async def require_player(player: Player = Depends(get_user_from_access_token)) -> Player:

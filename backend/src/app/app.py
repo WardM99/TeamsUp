@@ -46,7 +46,7 @@ async def init_database(): # pragma: no cover
 
 
 @app.get("/",)
-async def root(user = Depends(require_player)):
+async def root():
     """give a Hello World message"""
     print(user)
     return {"message": "Hello World"}

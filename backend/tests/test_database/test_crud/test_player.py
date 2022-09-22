@@ -8,7 +8,8 @@ from src.database.crud.player import (get_player,
                                       get_players_game,
                                       get_players_team,
                                       delete_player,
-                                      create_player)
+                                      create_player,
+                                      get_player_by_id)
 from src.database.crud.game import get_game
 from src.database.crud.team import get_team
 
@@ -53,6 +54,18 @@ async def test_get_player(database_with_data: AsyncSession):
     assert player.name == "Team1Player1"
     player: Player = await get_player(database_with_data, 2, team2)
     assert player.name == "Team2Player1"
+
+
+async def test_get_player_by_id(database_with_data: AsyncSession):
+    """Test get_player_by_id"""
+    player: Player = await get_player_by_id(database_with_data, 1)
+    assert player.name == "Team1Player1"
+
+
+async def test_get_player_by_id_ghost(database_with_data: AsyncSession):
+    """Test get_player_by_id with an id that don't exist""" 
+    with pytest.raises(NoResultFound):
+        await get_player_by_id(database_with_data, 1000) 
 
 
 async def test_get_player_not_in_team(database_with_data: AsyncSession):
