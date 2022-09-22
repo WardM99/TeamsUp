@@ -90,7 +90,7 @@ async def test_add_player_to_team(database_with_data: AsyncSession, test_client:
     post_request = await test_client.post("/games/2/teams/3/players", json={"name": "New Player"})
     assert post_request.status_code == status.HTTP_201_CREATED
     data = post_request.json()
-    assert data["name"] == "New Player"
+    assert data["player"]["name"] == "New Player"
 
 async def test_add_player_to_dont_existing_team(database_with_data: AsyncSession, test_client: AsyncClient):
     """Test to add a player to a team that don't exist"""
