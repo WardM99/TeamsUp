@@ -9,6 +9,13 @@ class ReturnPlayer(OrmModel):
     name: str
 
 
+class Token(BaseModel):
+    """Token generated after a player is created"""
+    access_token: str
+    token_type: str
+    player: ReturnPlayer
+
+
 class ReturnPlayers(OrmModel):
     """Represents a list of players"""
     players: list[ReturnPlayer]
