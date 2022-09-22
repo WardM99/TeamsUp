@@ -9,7 +9,7 @@ from src.app.logic.players import (logic_get_all_players,
                                    logic_get_player_by_id)
 from src.app.logic.teams import logic_get_team_by_id
 from src.database.schemas.player import ReturnPlayer, ReturnPlayers, InputPlayer
-from src.database.models import Team, Player
+from src.database.models import Team
 
 players_router = APIRouter(prefix="/players")
 
@@ -19,8 +19,7 @@ async def get_players(
     team: Team = Depends(logic_get_team_by_id)
 ):
     """Get all players of a team"""
-    players: list[Player] = await logic_get_all_players(database, team)
-    return ReturnPlayers(players=players)
+    return ReturnPlayers(players=await logic_get_all_players(database, team))
 
 
 @players_router.post("", response_model=ReturnPlayer, status_code=status.HTTP_201_CREATED)

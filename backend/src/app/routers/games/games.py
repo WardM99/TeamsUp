@@ -6,7 +6,6 @@ from starlette import status
 from src.database.database import get_session
 from src.app.logic.games import logic_get_all_games, logic_make_new_game, logic_get_game_by_id
 from src.database.schemas.game import ReturnGames, ReturnGame
-from src.database.models import Game
 from src.app.routers.games.teams.teams import teams_router
 
 games_router = APIRouter(prefix=("/games"))
@@ -16,9 +15,7 @@ games_router.include_router(teams_router, prefix="/{game_id}")
 @games_router.get("", response_model=ReturnGames, status_code=status.HTTP_200_OK)
 async def get_games(database: AsyncSession = Depends(get_session)):
     """Get all games"""
-    games: list[Game] = await logic_get_all_games(database)
-
-    return ReturnGames(games=games)
+    return ReturnGames(games=await logic_get_all_games(database))
 
 
 @games_router.post("", response_model=ReturnGame, status_code=status.HTTP_201_CREATED)
