@@ -38,6 +38,10 @@ ignore_errors = true
 module = "pyhumps"
 ignore_errors = true
 
+[[tool.mypy.overrides]]
+module = "jose.*"
+ignore_missing_imports = true
+
 [tool.pylint.master]
 extension-pkg-whitelist = "pydantic"
 

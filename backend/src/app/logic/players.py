@@ -48,7 +48,10 @@ def create_token(player: Player):
     )
 
 
-async def get_user_from_access_token(database: AsyncSession = Depends(get_session), token: str = Depends(oauth2_scheme))->Player:
+async def get_user_from_access_token(
+    database: AsyncSession = Depends(get_session),
+    token: str = Depends(oauth2_scheme)
+) -> Player:
     """Test"""
     payload = jwt.decode(
         token,
