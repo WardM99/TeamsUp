@@ -46,6 +46,12 @@ filterwarnings = [
     "ignore:.*The distutils package is deprecated:DeprecationWarning",
 ]
 
+[tool.coverage.run]
+omit = [
+    "alembic/*",
+    "tests/*"
+]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

@@ -20,8 +20,7 @@ async def get_players(
     team: Team = Depends(logic_get_team_by_id)
 ):
     """Get all players of a team"""
-    players: list[Player] = await logic_get_all_players(database, team)
-    return ReturnPlayers(players=players)
+    return ReturnPlayers(players=await logic_get_all_players(database, team))
 
 
 @players_router.post("", response_model=Token, status_code=status.HTTP_201_CREATED)

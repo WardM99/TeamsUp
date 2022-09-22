@@ -7,7 +7,7 @@ from src.database.database import get_session
 from src.app.logic.teams import logic_get_all_teams, logic_make_new_team, logic_get_team_by_id
 from src.app.logic.games import logic_get_game_by_id
 from src.database.schemas.team import ReturnTeams, ReturnTeam, InputTeam
-from src.database.models import Game, Team
+from src.database.models import Game
 from src.app.routers.games.teams.players.players import players_router
 
 teams_router = APIRouter(prefix="/teams")
@@ -20,8 +20,7 @@ async def get_teams(
     game: Game = Depends(logic_get_game_by_id)
 ):
     """Get all teams of a game"""
-    teams: list[Team] = await logic_get_all_teams(database, game)
-    return ReturnTeams(teams=teams)
+    return ReturnTeams(teams=await logic_get_all_teams(database, game))
 
 @teams_router.post("", response_model=ReturnTeam, status_code=status.HTTP_201_CREATED)
 async def make_team(
