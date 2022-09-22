@@ -1,12 +1,18 @@
 """Logic of players route"""
+<<<<<<< HEAD
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
+=======
+>>>>>>> master
 from datetime import timedelta, datetime
 import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.database.crud.player import get_player, get_players_team, create_player
 from src.database.schemas.player import Token
+<<<<<<< HEAD
 from src.database.database import get_session
+=======
+>>>>>>> master
 from src.database.models import Team, Player
 
 async def logic_get_all_players(database: AsyncSession, team: Team) -> list[Player]:
@@ -61,11 +67,11 @@ async def get_user_from_access_token(database: AsyncSession = Depends(get_sessio
 
         #if user_id is None or type_in_token is None:
         #    raise InvalidCredentialsException()
-        try:
-            player = await get_player(database, int(user_id))
-        except sqlalchemy.exc.NoResultFound as not_found:
-            raise InvalidCredentialsException() from not_found
-        return player
+        #try:
+        #    player = await get_player(database, int(user_id))
+        #except sqlalchemy.exc.NoResultFound as not_found:
+        #    raise InvalidCredentialsException() from not_found
+        #return player
     except Exception:
         print("OEPSIE")
     return None
