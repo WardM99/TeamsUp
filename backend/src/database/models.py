@@ -2,7 +2,7 @@
 # pylint: disable=too-few-public-methods
 from __future__ import annotations
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, Text
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, Text, Table
 from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
@@ -13,9 +13,11 @@ class Player(Base):
 
     player_id = Column(Integer, primary_key=True, index=True)
     team_id = Column(Integer, ForeignKey("teams.team_id"))
-    name: str = Column(Text, nullable=False)
+    name: str = Column(Text, nullable=False, unique=True)
+    password: str = Column(Text, nullable=False)
 
-    team: Team = relationship("Team", back_populates="players", uselist=False, lazy="selectin")
+    teams: list[Team] = \
+        relationship("Team", secondary="player_teams", back_populates="players", uselist=False, lazy="selectin")
 
 
 class Team(Base):
@@ -27,7 +29,7 @@ class Team(Base):
     team_name: str = Column(Text, nullable=False, unique=False)
 
     players: list[Player] = \
-        relationship("Player", back_populates="team", cascade="all, delete-orphan")
+        relationship("Player", secondary="player_teams", back_populates="teams")
 
     game: Game = relationship("Game", back_populates="teams", uselist=False, lazy="selectin")
 
@@ -42,3 +44,10 @@ class Game(Base):
 
     teams: list[Team] =  \
         relationship("Team", back_populates="game", cascade="all, delete-orphan")
+
+
+player_teams = Table(
+    "player_teams", Base.metadata,
+    Column("player_id", ForeignKey("players.player_id")),
+    Column("team_id", ForeignKey("teams.team_id"))
+)

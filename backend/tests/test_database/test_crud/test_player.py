@@ -4,9 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
 
 from src.database.models import Player, Game, Team
-from src.database.crud.player import (get_player,
-                                      get_players_game,
-                                      get_players_team,
+from src.database.crud.player import (
                                       delete_player,
                                       create_player,
                                       get_player_by_id)
@@ -35,82 +33,35 @@ async def database_with_data(database_session: AsyncSession):
 
     # Player
     for i in range(1,4):
-        player1: Player = Player(name=f"Team1Player{i}", team=team1)
-        player2: Player = Player(name=f"Team2Player{i}", team=team2)
-        database_session.add(player1)
-        database_session.add(player2)
+        player: Player = Player(name=f"Player{i}", password=f"Test{i}")
+        database_session.add(player)
 
     await database_session.commit()
 
     return database_session
 
 
-async def test_get_player(database_with_data: AsyncSession):
-    """Test get_player"""
-    game: Game = await get_game(database_with_data, 1)
-    team1: Team = await get_team(database_with_data, 1, game)
-    team2: Team = await get_team(database_with_data, 2, game)
-    player: Player = await get_player(database_with_data, 1, team1)
-    assert player.name == "Team1Player1"
-    player: Player = await get_player(database_with_data, 2, team2)
-    assert player.name == "Team2Player1"
-
-
 async def test_get_player_by_id(database_with_data: AsyncSession):
     """Test get_player_by_id"""
     player: Player = await get_player_by_id(database_with_data, 1)
-    assert player.name == "Team1Player1"
+    assert player.name == "Player1"
+    assert player.password == "Test1"
+
+    player: Player = await get_player_by_id(database_with_data, 2)
+    assert player.name == "Player2"
+    assert player.password == "Test2"
+
+    player: Player = await get_player_by_id(database_with_data, 3)
+    assert player.name == "Player3"
+    assert player.password == "Test3"
 
 
 async def test_get_player_by_id_ghost(database_with_data: AsyncSession):
-    """Test get_player_by_id with an id that don't exist""" 
+    """Test get_player_by_id with an id that don't exist"""
     with pytest.raises(NoResultFound):
-        await get_player_by_id(database_with_data, 1000) 
-
-
-async def test_get_player_not_in_team(database_with_data: AsyncSession):
-    """Test get_player when player is not in the team"""
-    game: Game = await get_game(database_with_data, 1)
-    team2: Team = await get_team(database_with_data, 2, game)
-    with pytest.raises(NoResultFound):
-        await get_player(database_with_data, 1, team2)
-
-
-async def test_get_players_game(database_with_data: AsyncSession):
-    """test get_players_game"""
-    game: Game = await get_game(database_with_data, 1)
-    players: list[Player] = await get_players_game(database_with_data, game)
-    assert len(players) == 6
-
-
-async def test_get_players_team(database_with_data: AsyncSession):
-    """Test get_players_team"""
-    game: Game = await get_game(database_with_data, 1)
-    team1: Team = await get_team(database_with_data, 1, game)
-    team2: Team = await get_team(database_with_data, 2, game)
-    players_team1 = await get_players_team(database_with_data, team1)
-    players_team2 = await get_players_team(database_with_data, team2)
-    assert len(players_team1) == 3
-    assert len(players_team2) == 3
-
-
-async def test_delete_player(database_with_data: AsyncSession):
-    """Test delete_player"""
-    game: Game = await get_game(database_with_data, 1)
-    team1: Team = await get_team(database_with_data, 1, game)
-    player: Player = await get_player(database_with_data, 5, team1)
-    await delete_player(database_with_data, player)
-    with pytest.raises(NoResultFound):
-        await get_player(database_with_data, 5, team1)
+        await get_player_by_id(database_with_data, 1000)
 
 
 async def test_create_player(database_with_data: AsyncSession):
     """Test create_player"""
-    game: Game = await get_game(database_with_data, 1)
-    team1: Team = await get_team(database_with_data, 1, game)
-    player_new: Player = await create_player(database_with_data, "Joske", team1)
-    players_team1: list[Player] = await get_players_team(database_with_data, team1)
-    assert len(players_team1) == 4
-    player: Player = await get_player(database_with_data, player_new.player_id, team1)
-    assert player.name == player_new.name
-    assert player.team == player_new.team
+    
