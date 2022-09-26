@@ -16,8 +16,14 @@ class Player(Base):
     name: str = Column(Text, nullable=False, unique=True)
     password: str = Column(Text, nullable=False)
 
-    teams: list[Team] = \
-        relationship("Team", secondary="player_teams", back_populates="players", uselist=False, lazy="selectin")
+    teams: list[Team] = relationship(
+                            "Team",
+                            secondary="player_teams",
+                            back_populates="players",
+                            uselist=False,
+                            lazy="selectin"
+                        )
+
 
 
 class Team(Base):

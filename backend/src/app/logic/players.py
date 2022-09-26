@@ -4,7 +4,9 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.database.crud.player import create_player, get_player_by_id, get_player_by_name_and_password
+from src.database.crud.player import (create_player,
+                                      get_player_by_id,
+                                      get_player_by_name_and_password)
 from src.database.schemas.player import Token
 from src.database.database import get_session
 from src.database.models import Player
@@ -34,7 +36,9 @@ async def logic_generate_token(player: Player) -> Token:
     )
 
 
-async def logic_get_player_by_name_and_password(database: AsyncSession,  name: str, password: str) -> Player:
+async def logic_get_player_by_name_and_password(database: AsyncSession,
+                                                name: str,
+                                                password: str) -> Player:
     """The logic to get a player by name and password"""
     return await get_player_by_name_and_password(database, name, password)
 
