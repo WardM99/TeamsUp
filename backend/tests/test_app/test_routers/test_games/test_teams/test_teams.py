@@ -63,18 +63,21 @@ async def test_get_team_by_id(database_with_data: AsyncSession, auth_client: Aut
     data = get_request.json()
     assert data["teamId"] == 1
     assert data["teamName"] == "Team1"
+    assert data["players"] == []
 
     get_request = await auth_client.get("/games/1/teams/2")
     assert get_request.status_code == status.HTTP_200_OK
     data = get_request.json()
     assert data["teamId"] == 2
     assert data["teamName"] == "Team2"
+    assert data["players"] == []
 
     get_request = await auth_client.get("/games/2/teams/3")
     assert get_request.status_code == status.HTTP_200_OK
     data = get_request.json()
     assert data["teamId"] == 3
     assert data["teamName"] == "Team3"
+    assert data["players"] == []
 
 
 async def test_get_team_by_id_not_in_game(database_with_data: AsyncSession, auth_client: AuthClient):
@@ -93,6 +96,7 @@ async def test_add_team(database_with_data: AsyncSession, auth_client: AuthClien
     assert post_request.status_code == status.HTTP_201_CREATED
     data = post_request.json()
     assert data["teamName"] == "New Team"
+    assert data["players"] == []
 
 
 async def test_add_team_not_existing_game(database_with_data: AsyncSession, auth_client: AuthClient):
@@ -105,3 +109,46 @@ async def test_add_team_not_existing_game(database_with_data: AsyncSession, auth
     post_request = await auth_client.post("/games/3/teams", json={"teamName": "New Team"})
     assert post_request.status_code == status.HTTP_404_NOT_FOUND
     assert post_request.json()["detail"] == "Not Found"
+
+
+async def test_join_team(database_with_data: AsyncSession, auth_client: AuthClient):
+    """Test to join a team"""
+    await auth_client.player()
+    get_request = await auth_client.get("/games/1/teams/1")
+    assert get_request.status_code == status.HTTP_200_OK
+    data = get_request.json()
+    assert data["players"] == []
+    post_request = await auth_client.post("/games/1/teams/1")
+    assert post_request.status_code == status.HTTP_200_OK
+    data = post_request.json()
+    assert len(data["players"]) == 1
+    assert data["players"][0]["name"] == "Player1"
+
+
+async def test_join_mulitple_teams(database_with_data: AsyncSession, auth_client: AuthClient):
+    """Test that you can only join one teams"""
+    await auth_client.player()
+    get_request = await auth_client.get("/games/1/teams/1")
+    assert get_request.status_code == status.HTTP_200_OK
+    data = get_request.json()
+    assert data["players"] == []
+
+    get_request = await auth_client.get("/games/1/teams/2")
+    assert get_request.status_code == status.HTTP_200_OK
+    data = get_request.json()
+    assert data["players"] == []
+
+    await auth_client.post("/games/1/teams/1")
+    get_request = await auth_client.get("/games/1/teams/1")
+    assert get_request.status_code == status.HTTP_200_OK
+    data = get_request.json()
+    assert len(data["players"]) == 1
+    await auth_client.post("/games/1/teams/2")
+    get_request = await auth_client.get("/games/1/teams/2")
+    assert get_request.status_code == status.HTTP_200_OK
+    data = get_request.json()
+    assert len(data["players"]) == 1
+    get_request = await auth_client.get("/games/1/teams/1")
+    assert get_request.status_code == status.HTTP_200_OK
+    data = get_request.json()
+    assert len(data["players"]) == 0
