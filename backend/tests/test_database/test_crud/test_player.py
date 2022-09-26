@@ -64,4 +64,8 @@ async def test_get_player_by_id_ghost(database_with_data: AsyncSession):
 
 async def test_create_player(database_with_data: AsyncSession):
     """Test create_player"""
-    
+    player_created: Player = await create_player(database_with_data, "New Player", "Monkey")
+    assert player_created.name == "New Player"
+    assert player_created.password == "Monkey"
+    player: Player = await get_player_by_id(database_with_data, 4)
+    assert player_created == player

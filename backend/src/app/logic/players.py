@@ -4,24 +4,24 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from sqlalchemy.ext.asyncio import AsyncSession
-from src.database.crud.player import create_player, get_player_by_id
+from src.database.crud.player import create_player, get_player_by_id, get_player_by_name_and_password
 from src.database.schemas.player import Token
 from src.database.database import get_session
-from src.database.models import Team, Player
+from src.database.models import Player
 
 #async def logic_get_all_players(database: AsyncSession, team: Team) -> list[Player]:
 #    """The logic to get all players of a team"""
 #    return await get_players_team(database, team)
 #
 #
-#async def logic_make_new_player(database: AsyncSession, team: Team, name: str) -> Player:
-#    """The logic to create a new player"""
-#    return await create_player(database, name, team)
+async def logic_make_new_player(database: AsyncSession, name: str, password: str) -> Player:
+    """The logic to create a new player"""
+    return await create_player(database, name, password)
 #
 #
-#async def logic_get_player_by_id(database: AsyncSession, team: Team, player_id: int) -> Player:
-#    """The logic to get a player by id"""
-#    return await get_player(database, player_id, team)
+async def logic_get_player_by_id(database: AsyncSession, player_id: int) -> Player:
+    """The logic to get a player by id"""
+    return await get_player_by_id(database, player_id)
 
 
 async def logic_generate_token(player: Player) -> Token:
@@ -34,7 +34,12 @@ async def logic_generate_token(player: Player) -> Token:
     )
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="")
+async def logic_get_player_by_name_and_password(database: AsyncSession,  name: str, password: str) -> Player:
+    """The logic to get a player by name and password"""
+    return await get_player_by_name_and_password(database, name, password)
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/players/login")
 
 
 def create_token(player: Player):

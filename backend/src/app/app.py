@@ -7,6 +7,7 @@ from alembic.runtime import migration
 from src.app.exceptions.handler import install_handlers
 from src.database.database import engine
 from src.database.exceptions import PendingMigrationsException
+from src.app.routers.players.players import players_router
 from .routers import games_router
 
 
@@ -28,6 +29,7 @@ install_handlers(app)
 
 # Include routes
 app.include_router(games_router)
+app.include_router(players_router)
 
 
 @app.on_event('startup')

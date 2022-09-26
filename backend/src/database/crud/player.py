@@ -26,3 +26,10 @@ async def get_player_by_id(database: AsyncSession, player_id: int) -> Player:
     query = select(Player).where(Player.player_id == player_id)
     result = await database.execute(query)
     return result.unique().scalars().one()
+
+
+async def get_player_by_name_and_password(database: AsyncSession, name: str, password: str) -> Player:
+    """Return a player by login"""
+    query = select(Player).where(Player.name == name).where(Player.password == password)
+    result = await database.execute(query)
+    return result.unique().scalars().one()
