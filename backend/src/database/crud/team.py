@@ -8,7 +8,7 @@ from src.database.models import Game, Team, Player
 
 async def create_team(database: AsyncSession, team_name: str, game: Game) -> Team:
     """Creates a new game"""
-    team: Team = Team(team_name=team_name, game=game)
+    team: Team = Team(team_name=team_name, game=game, players=[])
     database.add(team)
     await database.commit()
     return team
@@ -23,7 +23,7 @@ async def get_team(database: AsyncSession, team_id: int, game: Game) -> Team:
 
 async def get_all_teams_from_game(database: AsyncSession, game: Game) -> list[Team]:
     """returns all games"""
-    query = select(Team).where(Team.game == game)
+    query = select(Team).where(Team.game == game).options(selectinload(Team.players))
     result = await database.execute(query)
     return result.unique().scalars().all()
 
