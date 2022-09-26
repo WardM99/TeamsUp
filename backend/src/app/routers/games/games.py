@@ -5,27 +5,31 @@ from starlette import status
 
 from src.database.database import get_session
 from src.app.logic.games import logic_get_all_games, logic_make_new_game, logic_get_game_by_id
+from src.app.logic.players import require_player
 from src.database.schemas.game import ReturnGames, ReturnGame
+from src.database.models import Player
+
 from src.app.routers.games.teams.teams import teams_router
+from src.app.routers.games.cards.cards import card_router
 
 games_router = APIRouter(prefix=("/games"))
 
 games_router.include_router(teams_router, prefix="/{game_id}")
+games_router.include_router(card_router, prefix="/{game_id}")
 
 @games_router.get("", response_model=ReturnGames, status_code=status.HTTP_200_OK)
-async def get_games(database: AsyncSession = Depends(get_session)):
+async def get_games(database: AsyncSession = Depends(get_session), player: Player = Depends(require_player)):
     """Get all games"""
     return ReturnGames(games=await logic_get_all_games(database))
 
 
 @games_router.post("", response_model=ReturnGame, status_code=status.HTTP_201_CREATED)
-async def make_game(database: AsyncSession = Depends(get_session)):
+async def make_game(database: AsyncSession = Depends(get_session), owner: Player = Depends(require_player)):
     """Make a new game"""
-    return await logic_make_new_game(database)
+    return await logic_make_new_game(database, owner)
 
 
-@games_router.get("/{game_id}", response_model=ReturnGame, status_code=status.HTTP_200_OK)
-async def get_game(game_id: int, database: AsyncSession = Depends(get_session)):
-    """Get a game by id"""
-    return await logic_get_game_by_id(game_id, database)
- 
+@games_router.get("/stream")
+async def stream_view(database: AsyncSession = Depends(get_session)):
+    """Get the stream view"""
+    return {"details": "Not Implemented"}
