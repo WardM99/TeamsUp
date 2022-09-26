@@ -3,7 +3,7 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
 
-from src.database.models import Game
+from src.database.models import Game, Player
 from src.database.crud.game import (
     get_all_games,
     get_game,
@@ -14,8 +14,13 @@ from src.database.crud.game import (
 @pytest.fixture
 async def database_with_data(database_session: AsyncSession):
     """A function to fill the database with fake data that can easly be used when testing"""
+    # Player
+    player: Player = Player(name="Joske", password="Test")
+    database_session.add(player)
+    await database_session.commit()
+
     # Game
-    game: Game = Game()
+    game: Game = Game(owner=player)
     database_session.add(game)
     await database_session.commit()
 
@@ -45,7 +50,8 @@ async def test_get_all_games(database_with_data: AsyncSession):
 
 async def test_create_game(database_with_data: AsyncSession):
     """test create_game"""
-    game_new: Game = await create_game(database_with_data)
+    player: Player = Player(name="Testeron", password="Test")
+    game_new: Game = await create_game(database_with_data, player)
     games: list[Game] = await get_all_games(database_with_data)
     assert len(games) == 2
     game: Game = await get_game(database_with_data, 2)
@@ -53,6 +59,7 @@ async def test_create_game(database_with_data: AsyncSession):
     assert game.round_one_done is game_new.round_one_done
     assert game.round_two_done is game_new.round_two_done
     assert game.round_three_done is game_new.round_three_done
+    assert game.owner_id == player.player_id
 
 
 async def test_delete_team(database_with_data: AsyncSession):
