@@ -8,7 +8,7 @@ from src.database.models import Game, Player
 
 async def create_game(database: AsyncSession, owner: Player) -> Game:
     """Creates a new game"""
-    game: Game = Game(owner=owner)
+    game: Game = Game(owner=owner, cards=[])
     database.add(game)
     await database.commit()
     return game

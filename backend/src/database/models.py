@@ -63,5 +63,6 @@ class Card(Base):
 card_games = Table(
     "card_games", Base.metadata,
     Column("card_id", ForeignKey("cards.card_id")),
-    Column("game_id", ForeignKey("games.game_id"))
+    Column("game_id", ForeignKey("games.game_id")),
+    Column("guessed", Boolean(), default=False)
 )
