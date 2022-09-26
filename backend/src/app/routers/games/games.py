@@ -10,10 +10,12 @@ from src.database.schemas.game import ReturnGames, ReturnGame
 from src.database.models import Player
 
 from src.app.routers.games.teams.teams import teams_router
+from src.app.routers.games.cards.cards import card_router
 
 games_router = APIRouter(prefix=("/games"))
 
 games_router.include_router(teams_router, prefix="/{game_id}")
+games_router.include_router(card_router, prefix="/{game_id}")
 
 @games_router.get("", response_model=ReturnGames, status_code=status.HTTP_200_OK)
 async def get_games(database: AsyncSession = Depends(get_session), player: Player = Depends(require_player)):
@@ -25,4 +27,9 @@ async def get_games(database: AsyncSession = Depends(get_session), player: Playe
 async def make_game(database: AsyncSession = Depends(get_session), owner: Player = Depends(require_player)):
     """Make a new game"""
     return await logic_make_new_game(database, owner)
- 
+
+
+@games_router.get("/stream")
+async def stream_view(database: AsyncSession = Depends(get_session)):
+    """Get the stream view"""
+    return {"details": "Not Implemented"}
