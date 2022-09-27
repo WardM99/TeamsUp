@@ -8,7 +8,7 @@ from src.database.models import Game, Player
 
 async def create_game(database: AsyncSession, owner: Player) -> Game:
     """Creates a new game"""
-    game: Game = Game(owner=owner)
+    game: Game = Game(owner=owner, cards=[])
     database.add(game)
     await database.commit()
     return game
@@ -16,7 +16,7 @@ async def create_game(database: AsyncSession, owner: Player) -> Game:
 
 async def get_game(database: AsyncSession, game_id: int) -> Game:
     """Returns a game"""
-    query = select(Game).where(Game.game_id == game_id).options(selectinload(Game.cards))
+    query = select(Game).where(Game.game_id == game_id).options(selectinload(Game.cards)).options(selectinload(Game.teams))
     result = await database.execute(query)
     return result.unique().scalars().one()
 
