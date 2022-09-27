@@ -29,14 +29,14 @@ async def get_random_card(database: AsyncSession, game: Game)-> Card:
 
 async def update_card(database: AsyncSession, game: Game, card: Card) -> None:
     """Update a specific card to the opposite value"""
-    query = select(card_games.columns.guessed).where(card_games.columns.game_id == game.game_id).where(card_games.columns.card_id == card.card_id)
-    result = await database.execute(query)
+    query_select = select(card_games.columns.guessed).where(card_games.columns.game_id == game.game_id).where(card_games.columns.card_id == card.card_id)
+    result = await database.execute(query_select)
     value = result.unique().scalars().one()
-    query = update(card_games)\
+    query_update = update(card_games)\
             .where(card_games.columns.card_id == card.card_id)\
             .where(card_games.columns.game_id == game.game_id)\
             .values(guessed = not value)
-    await database.execute(query)
+    await database.execute(query_update)
 
 
 async def reset_cards_game(database: AsyncSession, game: Game) -> None:

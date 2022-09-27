@@ -23,9 +23,11 @@ async def logic_get_game_by_id(game_id: int, database: AsyncSession = Depends(ge
     return await get_game(database, game_id)
 
 
-async def logic_get_your_turn(database: AsyncSession, game_id: int, player: Player) -> bool:
+async def logic_get_your_turn(database: AsyncSession, game_id: int|None, player: Player) -> bool:
     """The logic to know if it's your turn or not"""
-    game: Game = await get_game(database, game_id)
-    teams: list[Team] = await get_all_teams_from_game(database, game)
-    team_turn: Team = teams[game.next_team_index]
-    return team_turn.players[team_turn.next_player_index] == player
+    if game_id is not None:
+        game: Game = await get_game(database, game_id)
+        teams: list[Team] = await get_all_teams_from_game(database, game)
+        team_turn: Team = teams[game.next_team_index]
+        return team_turn.players[team_turn.next_player_index] == player
+    return False
