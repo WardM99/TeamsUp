@@ -30,8 +30,11 @@ class Team(Base):
     team_name: str = Column(Text, nullable=False, unique=False)
     score = Column(Integer, default=0)
 
+    next_player_index: int = Column(Integer, default=0)
+
     game: Game = relationship("Game", back_populates="teams", uselist=False, lazy="selectin")
     players: list[Player] = relationship("Player", back_populates="current_team", cascade="all, delete-orphan")
+
 
 class Game(Base):
     """The data of a game that has been played or is playing"""
@@ -42,6 +45,8 @@ class Game(Base):
     round_one_done: bool = Column(Boolean, nullable=False, default=False)
     round_two_done: bool = Column(Boolean, nullable=False, default=False)
     round_three_done: bool = Column(Boolean, nullable=False, default=False)
+
+    next_team_index: int = Column(Integer, default=0)
 
     teams: list[Team] = relationship("Team", back_populates="game", cascade="all, delete-orphan")
 
@@ -54,10 +59,10 @@ class Card(Base):
     __tablename__ = "cards"
 
     card_id = Column(Integer, primary_key=True, index=True)
-    points = Column(Integer, nullable=False)
-    topic = Column(Text, nullable=False)
+    points: int = Column(Integer, nullable=False)
+    topic: str = Column(Text, nullable=False)
 
-    games = relationship("Game", secondary="card_games", back_populates="cards")
+    games: list[Game] = relationship("Game", secondary="card_games", back_populates="cards")
 
 
 card_games = Table(

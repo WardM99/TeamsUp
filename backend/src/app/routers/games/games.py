@@ -4,9 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.database.database import get_session
-from src.app.logic.games import logic_get_all_games, logic_make_new_game, logic_get_game_by_id
+from src.app.logic.games import logic_get_all_games, logic_make_new_game, logic_get_game_by_id, logic_get_your_turn
 from src.app.logic.players import require_player
-from src.database.schemas.game import ReturnGames, ReturnGame
+from src.database.schemas.game import ReturnGames, ReturnGame, ReturnTurn
 from src.database.models import Player
 
 from src.app.routers.games.teams.teams import teams_router
@@ -33,3 +33,10 @@ async def make_game(database: AsyncSession = Depends(get_session), owner: Player
 async def stream_view(database: AsyncSession = Depends(get_session)):
     """Get the stream view"""
     return {"details": "Not Implemented"}
+
+
+@games_router.get("/{game_id}/myturn", response_model=ReturnTurn)
+async def my_turn(game_id: int, database:AsyncSession = Depends(get_session), player: Player = Depends(require_player)):
+    """To check if it's your turn or not"""
+    turn: bool = await logic_get_your_turn(database, game_id, player)
+    return ReturnTurn(your_turn=turn)

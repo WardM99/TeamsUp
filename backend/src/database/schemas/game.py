@@ -15,3 +15,8 @@ class ReturnGame(OrmModel):
 class ReturnGames(OrmModel):
     """Represents a list of games"""
     games: list[ReturnGame]
+
+
+class ReturnTurn(OrmModel):
+    """Represents if it's your turn or not"""
+    your_turn: bool
