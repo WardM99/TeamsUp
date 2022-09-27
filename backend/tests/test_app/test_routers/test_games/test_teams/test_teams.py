@@ -102,10 +102,6 @@ async def test_add_team(database_with_data: AsyncSession, auth_client: AuthClien
 async def test_add_team_not_existing_game(database_with_data: AsyncSession, auth_client: AuthClient):
     """Test to add a team to a not existing game"""
     await auth_client.player()
-    get_request = await auth_client.get("/games/3")
-    assert get_request.status_code == status.HTTP_404_NOT_FOUND
-    assert get_request.json()["detail"] == "Not Found"
-
     post_request = await auth_client.post("/games/3/teams", json={"teamName": "New Team"})
     assert post_request.status_code == status.HTTP_404_NOT_FOUND
     assert post_request.json()["detail"] == "Not Found"

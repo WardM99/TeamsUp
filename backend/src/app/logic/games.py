@@ -3,8 +3,12 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.database import get_session
-from src.database.crud.game import get_all_games, create_game, get_game
+from src.database.crud.game import (get_all_games,
+                                    create_game, get_game,
+                                    start_suggests_cards,
+                                    start_next_round)
 from src.database.crud.team import get_all_teams_from_game
+from src.database.crud.card import reset_cards_game
 from src.database.models import Game, Player, Team
 
 
@@ -31,3 +35,13 @@ async def logic_get_your_turn(database: AsyncSession, game_id: int|None, player:
         team_turn: Team = teams[game.next_team_index]
         return team_turn.players[team_turn.next_player_index] == player
     return False
+
+
+async def logic_next_round(database: AsyncSession, game: Game, player: Player) -> None:
+    """goed to the next round"""
+    if player == game.owner:
+        await reset_cards_game(database, game)
+        if not game.may_suggests_cards and not game.round_one_done:
+            await start_suggests_cards(database, game)
+        else:
+            await start_next_round(database, game)

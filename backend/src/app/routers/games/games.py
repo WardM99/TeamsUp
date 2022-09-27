@@ -6,10 +6,12 @@ from starlette import status
 from src.database.database import get_session
 from src.app.logic.games import (logic_get_all_games,
                                  logic_make_new_game,
-                                 logic_get_your_turn)
+                                 logic_get_your_turn,
+                                 logic_get_game_by_id,
+                                 logic_next_round)
 from src.app.logic.players import require_player
 from src.database.schemas.game import ReturnGames, ReturnGame, ReturnTurn
-from src.database.models import Player
+from src.database.models import Player, Game
 
 from src.app.routers.games.teams.teams import teams_router
 from src.app.routers.games.cards.cards import card_router
@@ -46,3 +48,11 @@ async def my_turn(game_id: int, database:AsyncSession = Depends(get_session),
     """To check if it's your turn or not"""
     turn: bool = await logic_get_your_turn(database, game_id, player)
     return ReturnTurn(your_turn=turn)
+
+
+@games_router.patch("/{game_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def next_status(database: AsyncSession = Depends(get_session),
+                      game: Game = Depends(logic_get_game_by_id),
+                      player: Player = Depends(require_player)):
+    """Goes to the next round"""
+    await logic_next_round(database, game, player)
