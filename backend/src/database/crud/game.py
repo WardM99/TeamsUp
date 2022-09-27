@@ -16,7 +16,10 @@ async def create_game(database: AsyncSession, owner: Player) -> Game:
 
 async def get_game(database: AsyncSession, game_id: int) -> Game:
     """Returns a game"""
-    query = select(Game).where(Game.game_id == game_id).options(selectinload(Game.cards)).options(selectinload(Game.teams))
+    query = select(Game)\
+            .where(Game.game_id == game_id)\
+            .options(selectinload(Game.cards))\
+            .options(selectinload(Game.teams))
     result = await database.execute(query)
     return result.unique().scalars().one()
 

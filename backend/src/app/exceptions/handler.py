@@ -21,7 +21,7 @@ def install_handlers(app: FastAPI): # pragma: no cover
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"detail": "Bad Request"}
-        )   
+        )
 
 
     @app.exception_handler(ExpiredSignatureError)

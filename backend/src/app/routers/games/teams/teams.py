@@ -4,7 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.database.database import get_session
-from src.app.logic.teams import logic_get_all_teams, logic_make_new_team, logic_get_team_by_id, logic_join_team
+from src.app.logic.teams import (logic_get_all_teams,
+                                 logic_make_new_team,
+                                 logic_get_team_by_id,
+                                 logic_join_team)
 from src.app.logic.games import logic_get_game_by_id
 from src.app.logic.players import require_player
 from src.database.schemas.team import ReturnTeams, ReturnTeam, InputTeam

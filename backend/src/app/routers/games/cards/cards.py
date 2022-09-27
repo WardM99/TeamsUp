@@ -23,7 +23,8 @@ async def get_next_card(
         return await logic_get_random_card(database, game)
 
 
-@card_router.post("", dependencies=[Depends(require_player)], status_code=status.HTTP_204_NO_CONTENT)
+@card_router.post("", dependencies=[Depends(require_player)],
+                  status_code=status.HTTP_204_NO_CONTENT)
 async def add_card(input_card: InputCard,
                    database: AsyncSession = Depends(get_session),
                    game: Game = Depends(logic_get_game_by_id)):

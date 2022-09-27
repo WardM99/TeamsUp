@@ -16,8 +16,17 @@ class Player(Base):
     name: str = Column(Text, nullable=False, unique=True)
     password: str = Column(Text, nullable=False)
 
-    current_team: Team = relationship("Team", back_populates="players", uselist=False, lazy="selectin")
-    owned_games: list[Game] = relationship("Game", back_populates="owner", cascade="all, delete-orphan")
+    current_team: Team = relationship(
+        "Team",
+        back_populates="players",
+        uselist=False,
+        lazy="selectin"
+    )
+    owned_games: list[Game] = relationship(
+        "Game",
+        back_populates="owner",
+        cascade="all, delete-orphan"
+    )
 
 
 
@@ -33,7 +42,11 @@ class Team(Base):
     next_player_index: int = Column(Integer, default=0)
 
     game: Game = relationship("Game", back_populates="teams", uselist=False, lazy="selectin")
-    players: list[Player] = relationship("Player", back_populates="current_team", cascade="all, delete-orphan")
+    players: list[Player] = relationship(
+        "Player",
+        back_populates="current_team",
+        cascade="all, delete-orphan"
+    )
 
 
 class Game(Base):
@@ -51,7 +64,12 @@ class Game(Base):
     teams: list[Team] = relationship("Team", back_populates="game", cascade="all, delete-orphan")
 
     cards: list[Card] = relationship("Card", secondary="card_games", back_populates="games")
-    owner: Player = relationship("Player", back_populates="owned_games", uselist=False, lazy="selectin")
+    owner: Player = relationship(
+        "Player",
+        back_populates="owned_games",
+        uselist=False,
+        lazy="selectin"
+    )
 
 
 class Card(Base):
