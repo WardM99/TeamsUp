@@ -35,3 +35,21 @@ async def delete_game(database: AsyncSession, game: Game) -> None:
     """Deletes a game"""
     await database.delete(game)
     await database.commit()
+
+
+async def start_suggests_cards(database: AsyncSession, game: Game) -> None:
+    """set may_suggests_cards to true"""
+    game.may_suggests_cards = True
+    await database.commit()
+
+
+async def start_next_round(database: AsyncSession, game: Game) -> None:
+    """Starts the next round of a game"""
+    if not game.round_one_done:
+        game.may_suggests_cards = False
+        game.round_one_done = True
+    elif not game.round_two_done:
+        game.round_two_done = True
+    elif not game.round_three_done:
+        game.round_three_done = True
+    await database.commit()

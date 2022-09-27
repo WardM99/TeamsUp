@@ -1,8 +1,8 @@
 """init database
 
-Revision ID: a219f2ee97cb
+Revision ID: 91c16058d5bd
 Revises: 
-Create Date: 2022-09-26 21:14:36.096256
+Create Date: 2022-09-27 19:24:11.441292
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a219f2ee97cb'
+revision = '91c16058d5bd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,9 +30,11 @@ def upgrade() -> None:
     op.create_table('games',
     sa.Column('game_id', sa.Integer(), nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=True),
+    sa.Column('may_suggests_cards', sa.Boolean(), nullable=False),
     sa.Column('round_one_done', sa.Boolean(), nullable=False),
     sa.Column('round_two_done', sa.Boolean(), nullable=False),
     sa.Column('round_three_done', sa.Boolean(), nullable=False),
+    sa.Column('next_team_index', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['owner_id'], ['players.player_id'], ),
     sa.PrimaryKeyConstraint('game_id')
     )
@@ -56,6 +58,7 @@ def upgrade() -> None:
     sa.Column('game_id', sa.Integer(), nullable=True),
     sa.Column('team_name', sa.Text(), nullable=False),
     sa.Column('score', sa.Integer(), nullable=True),
+    sa.Column('next_player_index', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['game_id'], ['games.game_id'], ),
     sa.PrimaryKeyConstraint('team_id')
     )
@@ -65,6 +68,7 @@ def upgrade() -> None:
     op.create_table('card_games',
     sa.Column('card_id', sa.Integer(), nullable=True),
     sa.Column('game_id', sa.Integer(), nullable=True),
+    sa.Column('guessed', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['card_id'], ['cards.card_id'], ),
     sa.ForeignKeyConstraint(['game_id'], ['games.game_id'], )
     )
