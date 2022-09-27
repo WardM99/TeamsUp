@@ -3,12 +3,13 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
 
-from src.database.models import Game, Team
+from src.database.models import Game, Team, Player
 from src.database.crud.team import (
     create_team,
     get_team,
     get_all_teams_from_game,
-    delete_team
+    delete_team,
+    add_player
 )
 from src.database.crud.game import get_game
 
@@ -84,3 +85,15 @@ async def test_delete_team(database_with_data: AsyncSession):
     await delete_team(database_with_data, team)
     with pytest.raises(NoResultFound):
         await get_team(database_with_data, 1, game)
+
+
+async def test_add_player(database_with_data: AsyncSession):
+    """Test add_player"""
+    player: Player = Player(name="J", password="W")
+    database_with_data.add(player)
+    await database_with_data.commit()
+    game: Game = await get_game(database_with_data, 1)
+    team: Team = await get_team(database_with_data, 1, game)
+    await add_player(database_with_data, team, player)
+    assert player.current_team == team
+    assert player in team.players

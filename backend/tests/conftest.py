@@ -12,6 +12,8 @@ from src.app.app import app
 from src.app.utils.dependencies import get_http_session
 from src.database.database import get_session
 
+from tests.utils.authorization.auth_client import AuthClient
+
 
 @pytest.fixture(scope="session")
 def tables():
@@ -75,3 +77,23 @@ def test_client(database_session: AsyncSession, aiohttp_session: AsyncMock) -> A
     app.dependency_overrides[get_session] = override_get_session
     app.dependency_overrides[get_http_session] = override_get_http_session
     return AsyncClient(app=app, base_url="http://test")
+
+
+@pytest.fixture
+def auth_client(database_session: AsyncSession, aiohttp_session: AsyncMock) -> AuthClient:
+    """Fixture to get a TestClient that handles authentication"""
+
+    def override_get_session() -> AsyncGenerator[AsyncSession, None]:
+        """Inner function to override the Session used in the app
+        A session provided by a fixture will be used instead
+        """
+        yield database_session
+
+    def override_get_http_session() -> Generator[AsyncMock, None, None]:
+        """Inner function to override the ClientSession used in the app"""
+        yield aiohttp_session
+
+    # Replace get_session with a call to this method instead
+    app.dependency_overrides[get_session] = override_get_session
+    app.dependency_overrides[get_http_session] = override_get_http_session
+    return AuthClient(database_session, app=app, base_url="http://test")

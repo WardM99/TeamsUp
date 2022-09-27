@@ -5,7 +5,6 @@ from src.database.schemas.utils import OrmModel, BaseModel
 class ReturnPlayer(OrmModel):
     """Represents a player"""
     player_id: int
-    team_id: int
     name: str
 
 
@@ -24,3 +23,4 @@ class ReturnPlayers(OrmModel):
 class InputPlayer(BaseModel):
     """Input details of a player"""
     name: str
+    password: str
