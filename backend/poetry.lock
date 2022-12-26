@@ -31,14 +31,11 @@ frozenlist = ">=1.1.0"
 
 [[package]]
 name = "aiosqlite"
-version = "0.17.0"
+version = "0.18.0"
 description = "asyncio bridge to the standard sqlite3 module"
 category = "main"
 optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-typing_extensions = ">=3.7.2"
+python-versions = ">=3.7"
 
 [[package]]
 name = "alembic"
@@ -715,7 +712,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "afe1b76baee21804f2efeef3734d63fab37f91abba5933c2ab882c2346f4ed87"
+content-hash = "c6c94663a6ce481f6d180edf07e06a1e945ee4b31454ad56c504c2bf21e4d92e"
 
 [metadata.files]
 aiohttp = [
@@ -812,8 +809,8 @@ aiosignal = [
     {file = "aiosignal-1.2.0.tar.gz", hash = "sha256:78ed67db6c7b7ced4f98e495e572106d5c432a93e1ddd1bf475e1dc05f5b7df2"},
 ]
 aiosqlite = [
-    {file = "aiosqlite-0.17.0-py3-none-any.whl", hash = "sha256:6c49dc6d3405929b1d08eeccc72306d3677503cc5e5e43771efc1e00232e8231"},
-    {file = "aiosqlite-0.17.0.tar.gz", hash = "sha256:f0e6acc24bc4864149267ac82fb46dfb3be4455f99fe21df82609cc6e6baee51"},
+    {file = "aiosqlite-0.18.0-py3-none-any.whl", hash = "sha256:c3511b841e3a2c5614900ba1d179f366826857586f78abd75e7cbeb88e75a557"},
+    {file = "aiosqlite-0.18.0.tar.gz", hash = "sha256:faa843ef5fb08bafe9a9b3859012d3d9d6f77ce3637899de20606b7fc39aa213"},
 ]
 alembic = [
     {file = "alembic-1.9.0-py3-none-any.whl", hash = "sha256:e8ce855f731d92cfdbf9a71d148401fcc420399927817c6e2c0b6a5f31db745d"},
