@@ -11,5 +11,6 @@ updates:
       interval: "daily"
   - package-ecosystem: npm
     directory: "/frontend"
+    open-pull-requests-limit: 100
     schedule:
       interval: "daily"
