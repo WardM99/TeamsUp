@@ -1,13 +1,14 @@
 """Tests for a the crud actions of player"""
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.exc import NoResultFound, IntegrityError
 
 from src.database.models import Player, Game, Team
 from src.database.crud.player import (
                                       delete_player,
                                       create_player,
-                                      get_player_by_id)
+                                      get_player_by_id,
+                                      get_player_by_name_and_password)
 from src.database.crud.game import get_game
 from src.database.crud.team import get_team
 
@@ -69,3 +70,38 @@ async def test_create_player(database_with_data: AsyncSession):
     assert player_created.password == "Monkey"
     player: Player = await get_player_by_id(database_with_data, 4)
     assert player_created == player
+
+
+async def test_create_player_same_name(database_with_data: AsyncSession):
+    """Test to create a player with the same name"""
+    player_created: Player = await create_player(database_with_data, "New Player", "Monkey")
+    with pytest.raises(IntegrityError):
+        player_created_copy: Player = await create_player(database_with_data, "New Player", "Monkey")
+
+
+async def test_delete_player(database_with_data: AsyncSession):
+    """Test to delete a player"""
+    player: Player = await get_player_by_id(database_with_data, 3)
+    assert player is not None
+    await delete_player(database_with_data, player)
+    with pytest.raises(NoResultFound):
+        await get_player_by_id(database_with_data, 3)
+
+
+async def test_get_player_by_name_and_password(database_with_data: AsyncSession):
+    """Test to get a player by name and password"""
+    player: Player = await get_player_by_name_and_password(database_with_data, "Player1", "Test1")
+    assert player.name == "Player1"
+    assert player.password == "Test1"
+
+
+async def test_get_player_by_name_wrong_and_password(database_with_data: AsyncSession):
+    """Test to get a player by name and password"""
+    with pytest.raises(NoResultFound):
+        player: Player = await get_player_by_name_and_password(database_with_data, "Payer1", "Test1")
+
+
+async def test_get_player_by_name_and_password_wrong(database_with_data: AsyncSession):
+    """Test to get a player by name and wrong password"""
+    with pytest.raises(NoResultFound):
+        player: Player = await get_player_by_name_and_password(database_with_data, "Player1", "Test2")

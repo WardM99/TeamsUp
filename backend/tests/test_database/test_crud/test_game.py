@@ -8,7 +8,9 @@ from src.database.crud.game import (
     get_all_games,
     get_game,
     create_game,
-    delete_game
+    delete_game,
+    start_suggests_cards,
+    start_next_round
 )
 
 @pytest.fixture
@@ -68,3 +70,35 @@ async def test_delete_team(database_with_data: AsyncSession):
     await delete_game(database_with_data, game)
     with pytest.raises(NoResultFound):
         await get_game(database_with_data, 1)
+
+
+async def test_start_suggest_cards(database_with_data: AsyncSession):
+    """Test to start may suggesting cards"""
+    game: Game = await get_game(database_with_data, 1)
+    assert not game.may_suggests_cards
+
+    await start_suggests_cards(database_with_data, game)
+    assert game.may_suggests_cards
+
+
+async def test_start_next_round(database_with_data: AsyncSession):
+    """Test to start the next round"""
+    game: Game = await get_game(database_with_data, 1)
+    assert not game.round_one_done
+    assert not game.round_two_done
+    assert not game.round_three_done
+
+    await start_next_round(database_with_data, game)
+    assert game.round_one_done
+    assert not game.round_two_done
+    assert not game.round_three_done
+
+    await start_next_round(database_with_data, game)
+    assert game.round_one_done
+    assert game.round_two_done
+    assert not game.round_three_done
+
+    await start_next_round(database_with_data, game)
+    assert game.round_one_done
+    assert game.round_two_done
+    assert game.round_three_done
