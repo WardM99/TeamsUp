@@ -68,7 +68,7 @@ async def test_my_turn(database_with_data: AsyncSession, auth_client: AuthClient
     assert my_turn_request.status_code == status.HTTP_200_OK
     data = my_turn_request.json()
     assert not data["yourTurn"]
-    
+
     post_request = await auth_client.post("/games/2/teams/3")
     assert post_request.status_code == status.HTTP_200_OK
     my_turn_request = await auth_client.get("/games/2/myturn")
