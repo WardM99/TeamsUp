@@ -18,7 +18,8 @@ players_router = APIRouter(prefix=("/players"))
 async def new_player(input_player: InputPlayer, database: AsyncSession = Depends(get_session)):
     """Make a new player"""
     player: Player = await logic_make_new_player(database, input_player.name, input_player.password)
-    return await logic_generate_token(player)
+    token: Token = await logic_generate_token(player)
+    return token
 
 
 @players_router.post("/login", response_model=Token)
