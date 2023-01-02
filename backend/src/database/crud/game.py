@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database.models import Game, Player
+from src.database.models import Game, Player, Team
 
 
 async def create_game(database: AsyncSession, owner: Player) -> Game:
@@ -38,8 +38,16 @@ async def delete_game(database: AsyncSession, game: Game) -> None:
 
 
 async def start_suggests_cards(database: AsyncSession, game: Game) -> None:
-    """set may_suggests_cards to true"""
+    """Set may_suggests_cards to true"""
     game.may_suggests_cards = True
+    await database.commit()
+
+
+async def next_player(database: AsyncSession, game: Game) -> None:
+    """Set next player"""
+    team: Team = game.teams[game.next_team_index]
+    team.next_player_index = (team.next_player_index + 1) % len(team.players)
+    game.next_team_index = (game.next_team_index + 1) % len(team.players)
     await database.commit()
 
 

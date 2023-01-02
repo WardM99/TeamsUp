@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from src.database.models import Card, Game, Player, card_games
 from src.database.crud.card import (
-    get_random_card, update_card, reset_cards_game, add_card_to_game
+    get_random_card, update_card, reset_cards_game, add_card_to_game, get_unguessed_cards
 )
 from src.database.crud.game import get_game
 
@@ -90,3 +90,15 @@ async def test_add_multiple_cards_to_game(database_with_data: AsyncSession):
     result = await database_with_data.execute(query)
     value = result.unique().scalars().all()
     assert len(value) == 12
+
+
+async def test_get_unguessed_cards(database_with_data: AsyncSession):
+    """Test to get all the unguessed cards"""
+    game = await get_game(database_with_data, 1)
+    cards = await get_unguessed_cards(database_with_data, game)
+    assert len(cards) == 10
+    for _ in range(9):
+        card = await get_random_card(database_with_data, game)
+        await update_card(database_with_data, game, card)
+    cards = await get_unguessed_cards(database_with_data, game)
+    assert len(cards) == 1

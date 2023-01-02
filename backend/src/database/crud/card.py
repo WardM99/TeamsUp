@@ -50,3 +50,13 @@ async def reset_cards_game(database: AsyncSession, game: Game) -> None:
             .where(card_games.columns.game_id == game.game_id)\
             .values(guessed = False)
     await database.execute(query)
+
+
+async def get_unguessed_cards(database: AsyncSession, game: Game) -> list[Card]:
+    """get all cards that are unguessed"""
+    query = select(card_games.columns.card_id)\
+        .where(card_games.columns.game_id == game.game_id)\
+        .where(card_games.columns.guessed == False)
+    result = await database.execute(query)
+    value = result.unique().scalars().all()
+    return value
