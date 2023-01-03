@@ -19,6 +19,7 @@ aiohttp = "^3.8.3"
 PyJWT = "^2.6.0"
 python-jose = "^3.3.0"
 python-multipart = "^0.0.5"
+environs = "^9.5.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -11,15 +11,23 @@ from src.app.routers.players.players import players_router
 from .routers import games_router
 
 
+from environs import Env
+
+
 app = FastAPI(
     title="TeamsUp",
     version="0.0.1"
 )
+env = Env()
 
+# Read the .env file
+env.read_env()
+CORS_ORIGINS: list[str] = env.list("CORS_ORIGINS", ["http://localhost:3000"])
 
 # Add middleware
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
