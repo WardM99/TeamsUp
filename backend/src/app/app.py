@@ -1,6 +1,7 @@
 """Startup of FastAPI application"""
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from environs import Env
 from alembic import config, script
 from alembic.runtime import migration
 
@@ -9,9 +10,6 @@ from src.database.database import engine
 from src.database.exceptions import PendingMigrationsException
 from src.app.routers.players.players import players_router
 from .routers import games_router
-
-
-from environs import Env
 
 
 app = FastAPI(
