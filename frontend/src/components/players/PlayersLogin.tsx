@@ -1,34 +1,21 @@
-import { useEffect, FormEvent, useState } from 'react'
-import axios from 'axios';
+import { FormEvent, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { login } from '../../utils/api/player';
 
 function PlayersLogin() {
 	const [name, setName] = useState("");
 	const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault();
-		const data = {"username": name, "password": password, "grant_type": "password"};
-		const config = {
-			headers: {
-				"content-type": "application/x-www-form-urlencoded"
-			}
+		const loginCode = await login(name, password);
+		if(loginCode == 200){
+			navigate("/");
 		}
-		axios.post("http://localhost:8000/players/login", data, config)
-			.then(response => {
-				console.log(response.data)
-			})
-			.catch(error =>{
-				console.log(error)
-			})
-
-		/*
-			"https://localhost:8000/players/login",
-			{"username": name, "password": password, "grant_type": "password"},
-			{headers:{"content-type": "application/x-www-form-urlencoded"}}
-		*/
 		
 	}
 
@@ -43,7 +30,8 @@ function PlayersLogin() {
 				<Form.Label>Password</Form.Label>
 				<Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} required/>
 			</Form.Group>
-			<Button variant="primary" type="submit">Submit</Button>
+			<Button variant="primary" type="submit">Login</Button>
+			<a href="/register">Register</a>
 		</Form>
     )
 }
