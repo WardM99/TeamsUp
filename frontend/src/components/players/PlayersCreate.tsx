@@ -13,7 +13,7 @@ function PlayersCreate() {
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault();
 		const loginCode = await createPlayer(name, password);
-		if(loginCode == 201){
+		if(loginCode === 201){
 			navigate("/");
 		}
 		

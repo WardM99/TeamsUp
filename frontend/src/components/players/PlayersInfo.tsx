@@ -4,7 +4,7 @@ import { currentPlayer } from '../../utils/api/player'
 import { Player } from '../../data/interfaces'
 
 function PlayersInfo() {
-  const [player, setPlayer] = useState<Player>();
+    const [player, setPlayer] = useState<Player>();
     const navigate = useNavigate();
 
 
@@ -19,8 +19,9 @@ function PlayersInfo() {
     }
 
     useEffect(() => {
-        getPlayer();
-    }, []);
+        if(player === undefined)
+            getPlayer();
+    });
     return (
         <span>{player?.name}</span>
     )

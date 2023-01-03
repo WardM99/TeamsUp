@@ -13,7 +13,7 @@ function PlayersLogin() {
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault();
 		const loginCode = await login(name, password);
-		if(loginCode == 200){
+		if(loginCode === 200){
 			navigate("/");
 		}
 		
