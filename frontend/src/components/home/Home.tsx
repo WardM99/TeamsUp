@@ -1,10 +1,14 @@
+import GameList from '../games/GamesList'
 import NavBar from './NavBar'
 
 
 function Home() {
     
     return (
-        <div><NavBar/></div>
+        <div>
+        <NavBar/>
+        <GameList/>
+        </div>
     )
 }
 

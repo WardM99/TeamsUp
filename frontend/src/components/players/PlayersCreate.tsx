@@ -31,7 +31,7 @@ function PlayersCreate() {
 				<Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} required/>
 			</Form.Group>
 			<Button variant="primary" type="submit">Create</Button>
-            <a href="/login">Login</a>
+			<Button variant="link" href="/login">login</Button>
 		</Form>
     )
 }

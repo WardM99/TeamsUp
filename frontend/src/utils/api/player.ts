@@ -1,7 +1,9 @@
 import axios from "axios"
 import { axiosInstance } from "./api"
 import { Player } from "../../data/interfaces";
-import { setAccessToken, setTokenType, getAccessToken, getTokenType } from "../local-storage.ts/auth"
+import { setAccessToken, setTokenType } from "../local-storage.ts/auth"
+import { getHeaders } from "./api";
+
 
 interface LoginResponse {
     access_token: string;
@@ -14,16 +16,6 @@ function setLogInTokens(response: LoginResponse) {
     setTokenType(response.token_type);
 }
 
-function getHeaders(){
-    const type = getTokenType();
-    const token = getAccessToken();
-    const config = {
-        headers: {
-            "Authorization": `${type} ${token}`
-        }
-    }
-    return config
-}
 
 export async function createPlayer(name: string, password: string) : Promise<number> {
     const payload = {
@@ -33,14 +25,14 @@ export async function createPlayer(name: string, password: string) : Promise<num
     try{
         const response = await axiosInstance.post("/players", payload);
         const login = response.data as LoginResponse
-        setLogInTokens(login);
+        //setLogInTokens(login);
         return response.status;
     }
     catch (error) {
         if (axios.isAxiosError(error)) {
             return error.response?.status || 500;
         } else {
-            return 500
+            return 500;
         }
     }
 }
