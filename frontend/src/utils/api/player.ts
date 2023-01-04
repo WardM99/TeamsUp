@@ -25,7 +25,7 @@ export async function createPlayer(name: string, password: string) : Promise<num
     try{
         const response = await axiosInstance.post("/players", payload);
         const login = response.data as LoginResponse
-        //setLogInTokens(login);
+        setLogInTokens(login);
         return response.status;
     }
     catch (error) {
