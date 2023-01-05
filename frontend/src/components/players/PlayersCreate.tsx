@@ -2,7 +2,6 @@ import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { createPlayer } from "../../utils/api/player";
 
 function PlayersCreate() {
@@ -29,7 +28,6 @@ function PlayersCreate() {
           required
         />
       </Form.Group>
-
       <Form.Group controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control
@@ -43,7 +41,7 @@ function PlayersCreate() {
         Create
       </Button>
       <Button variant="link" href="/login">
-        login
+        Login
       </Button>
     </Form>
   );
