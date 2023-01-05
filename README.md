@@ -26,8 +26,40 @@ pip3 install poetry
 poetry install
 ```
 
+### Setup backend database
+
+```shell
+alembic upgrade --head
+```
+
 ### Setup backend server
 
 ```shell
 uvicorn src.app.app:app
+```
+
+## Frontend
+
+### Setup
+
+- Install node
+- Install yarn
+
+```shell
+npm install --global yarn
+```
+
+### Setup Frontend
+
+```shell
+cd frontend
+yarn install
+yarn start
+```
+
+### Run tests
+
+```shell
+yarn install --dev
+yarn test
 ```
