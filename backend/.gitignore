@@ -180,3 +180,5 @@ dmypy.json
 cython_debug/
 
 .vscode
+
+database.db
