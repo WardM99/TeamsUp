@@ -65,7 +65,7 @@ jobs:
           key: ${{ runner.os }}-yarn-cache-${{ hashFiles('**/yarn.lock', '**/package.json') }}
 
       - run: yarn install --prefer-offline
-      - run: yarn run lint
+      - run: yarn lint
 
   Style:
     needs: [Test]
@@ -83,4 +83,4 @@ jobs:
           key: ${{ runner.os }}-yarn-cache-${{ hashFiles('**/yarn.lock', '**/package.json') }}
 
       - run: yarn install --prefer-offline
-      - run: yarn run prettier -c src
+      - run: yarn prettier-check
