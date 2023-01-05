@@ -78,6 +78,28 @@ describe('PlayersLogin', () => {
         expect(navigateMock).toBeCalledTimes(0);
     });
 
+    it('no createPlayer when name is not filled in', async () => {
+        render(<PlayersLogin></PlayersLogin>)
+        const passwordInput = screen.getByLabelText('Password');
+        const loginButton = screen.getByText('Login');
+
+        fireEvent.change(passwordInput, { target: { value: 'testpassword' } });
+        await fireEvent.click(loginButton);
+
+        expect(login).toBeCalledTimes(0);
+    });
+
+    it('no createPlayer when password is not filled in', async () => {
+        render(<PlayersLogin></PlayersLogin>)
+        const nameInput = screen.getByLabelText('Name');
+        const loginButton = screen.getByText('Login');
+
+        fireEvent.change(nameInput, { target: { value: 'user' } });
+        await fireEvent.click(loginButton);
+
+        expect(login).toBeCalledTimes(0);
+    });
+
     it('register button navigates to /register', async () => {
         render(<PlayersLogin></PlayersLogin>)
         const registerButton = screen.getByText('Register');
