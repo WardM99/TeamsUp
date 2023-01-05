@@ -1,6 +1,5 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import PlayersLogin from './PlayersLogin';
-import { useNavigate } from "react-router-dom";
 import { login } from '../../utils/api/player';
 
 const navigateMock = jest.fn();
