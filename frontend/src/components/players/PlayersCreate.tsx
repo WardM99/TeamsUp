@@ -41,7 +41,7 @@ function PlayersCreate() {
         Create
       </Button>
       <Button variant="link" href="/login">
-        login
+        Login
       </Button>
     </Form>
   );
