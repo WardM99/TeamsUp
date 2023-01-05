@@ -1,17 +1,22 @@
 import { FormEvent, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { createPlayer } from '../../utils/api/player';
 
-
-
-function PlayersLogin() {
-	const [name, setName] = useState("");
+function PlayersCreate() {
+    const [name, setName] = useState("");
 	const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
 	async function handleSubmit(event: FormEvent) {
 		event.preventDefault();
-		alert(name + " " + password);
+		const loginCode = await createPlayer(name, password);
+		if(loginCode === 201){
+			navigate("/");
+		}
+		
 	}
 
     return (
@@ -25,9 +30,10 @@ function PlayersLogin() {
 				<Form.Label>Password</Form.Label>
 				<Form.Control type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} required/>
 			</Form.Group>
-			<Button variant="primary" type="submit">Submit</Button>
+			<Button variant="primary" type="submit">Create</Button>
+			<Button variant="link" href="/login">login</Button>
 		</Form>
     )
 }
 
-export default PlayersLogin
+export default PlayersCreate
