@@ -1,4 +1,5 @@
 import * as api from './api';
+import * as auth from '../local-storage.ts/auth'
 import { createPlayer, login, logout, currentPlayer } from "./player";
 
 jest.mock('./api', () => {
@@ -11,6 +12,13 @@ jest.mock('./api', () => {
     axiosInstance: { }
   }
 });
+
+jest.mock('../local-storage.ts/auth', () => {
+  return {
+    setAccessToken: jest.fn(),
+    setTokenType: jest.fn(),
+  }
+})
 
 describe("createPlayer", () => {
 
@@ -31,7 +39,10 @@ describe("createPlayer", () => {
     const name = "testuser";
     const password = "testpass";
     const status = await createPlayer(name, password);
-    expect(status).toBe(201);
+    expect(auth.setAccessToken).toBeCalledTimes(1);
+    expect(auth.setAccessToken).toHaveBeenCalledWith("test_access_token");
+    expect(auth.setTokenType).toBeCalledTimes(1);
+    expect(auth.setTokenType).toHaveBeenCalledWith("test_token_type");
   });
   
   it("should return 400 with empty name", async () => {
@@ -88,6 +99,10 @@ describe("login", () => {
 
     const result = await login("test player", "password");
     expect(result).toBe(200);
+    expect(auth.setAccessToken).toBeCalledTimes(1);
+    expect(auth.setAccessToken).toHaveBeenCalledWith("abc123");
+    expect(auth.setTokenType).toBeCalledTimes(1);
+    expect(auth.setTokenType).toHaveBeenCalledWith("bearer");
   });
 
   test("should return the correct status code when the login fails", async () => {
@@ -131,7 +146,6 @@ describe('getUsers', () => {
       }
     });
     const player = await currentPlayer();
-    console.log(player);
     expect(player).toEqual({
       playerId: 1,
       name: 'John'
@@ -143,4 +157,14 @@ describe('getUsers', () => {
     const player = await currentPlayer();
     expect(player).toBeUndefined();
   });
+});
+
+describe('logout', () => {
+  test('should use setAccessToken and setTokenType once', () => {
+    logout();
+    expect(auth.setAccessToken).toBeCalledTimes(1);
+    expect(auth.setAccessToken).toHaveBeenCalledWith(null);
+    expect(auth.setTokenType).toBeCalledTimes(1);
+    expect(auth.setTokenType).toHaveBeenCalledWith(null);
+  })
 });
