@@ -43,6 +43,7 @@ describe("createPlayer", () => {
     expect(auth.setAccessToken).toHaveBeenCalledWith("test_access_token");
     expect(auth.setTokenType).toBeCalledTimes(1);
     expect(auth.setTokenType).toHaveBeenCalledWith("test_token_type");
+    expect(status).toEqual(201);
   });
   
   it("should return 400 with empty name", async () => {
