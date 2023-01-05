@@ -1,6 +1,7 @@
 """Startup of FastAPI application"""
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from environs import Env
 from alembic import config, script
 from alembic.runtime import migration
 
@@ -15,11 +16,16 @@ app = FastAPI(
     title="TeamsUp",
     version="0.0.1"
 )
+env = Env()
 
+# Read the .env file
+env.read_env()
+CORS_ORIGINS: list[str] = env.list("CORS_ORIGINS", ["http://localhost:3000"])
 
 # Add middleware
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,8 +1,17 @@
-import "./App.css";
-import PlayersLogin from "./players/PlayersLogin";
+import './App.css';
+import PlayersLogin from './components/players/PlayersLogin';
+import { Route, Routes } from 'react-router-dom';
+import Home from './components/home/Home';
+import PlayersCreate from './components/players/PlayersCreate';
 
 function App() {
-  return <PlayersLogin></PlayersLogin>;
+  return (
+   <Routes>
+    <Route path="/login" element={<PlayersLogin />}/>
+    <Route path="/register" element= {<PlayersCreate />}/>
+    <Route path="/" element={<Home />}/>
+   </Routes>
+  );
 }
 
 export default App;
