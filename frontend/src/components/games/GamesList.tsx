@@ -21,7 +21,7 @@ function GameList() {
   });
 
   return (
-    <Container>
+    <Container data-testid="ListGamesId">
       <h1>GameList</h1>
       <Row>
         {games?.games.map((game, index) => {
