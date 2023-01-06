@@ -9,5 +9,5 @@ export interface Game {
 }
 
 export interface Games {
-  games: [Game];
+  games: Game[];
 }

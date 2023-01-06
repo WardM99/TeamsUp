@@ -28,7 +28,6 @@ describe('GameCard', () => {
         const cardTitle = getByText('Join a team');
         const joinButton1 = getByText('Join team 1');
         const joinButton2 = getByText('Join team 2');
-        console.log(cardTitle)
         expect(cardTitle).not.toBeUndefined();
         expect(joinButton1).not.toBeUndefined();
         expect(joinButton2).not.toBeUndefined();

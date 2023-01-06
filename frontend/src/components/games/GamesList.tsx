@@ -12,6 +12,7 @@ function GameList() {
   async function getGamesFromApi() {
     const response = await getGames();
     setGames(response);
+    console.log(response);
   }
 
   useEffect(() => {
