@@ -17,7 +17,7 @@ function NavBar() {
     <Navbar bg="light" expand="lg" data-testid="NavBarId">
       <Container>
         <Navbar.Brand href="/">
-          <PlayersInfo/>
+          <PlayersInfo />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -25,7 +25,11 @@ function NavBar() {
             <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#link">Link</Nav.Link>
           </Nav>
-          <Button data-testid="LogOutButtonId" variant="danger" onClick={logoutAndRedirect}>
+          <Button
+            data-testid="LogOutButtonId"
+            variant="danger"
+            onClick={logoutAndRedirect}
+          >
             Log out
           </Button>
         </Navbar.Collapse>
