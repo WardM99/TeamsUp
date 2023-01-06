@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { currentPlayer } from "../../utils/api/player";
 import PlayersInfo from "./PlayersInfo";
 
@@ -26,7 +27,7 @@ describe("PlayersInfo", () => {
     render(<PlayersInfo />);
     expect(currentPlayer).toBeCalledTimes(1);
     await waitFor(() => {
-      expect(screen.getByText("John Doe")).not.toBeUndefined();
+      expect(screen.getByText("John Doe")).toBeInTheDocument();
     });
   });
 
