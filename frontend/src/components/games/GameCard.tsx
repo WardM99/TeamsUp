@@ -12,7 +12,7 @@ interface Props {
 
 function GameCard(props: Props) {
   return (
-    <Card>
+    <Card id={`GameCardId${props.game.gameId}`}>
       <Card.Header as="h5">
         Game of {props.game.owner.name}{" "}
         <Button variant="danger" className="float-end">
