@@ -14,7 +14,7 @@ function NavBar() {
     navigate("/login");
   }
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" data-testid="NavBarId">
       <Container>
         <Navbar.Brand href="/">
           <PlayersInfo />
@@ -25,7 +25,11 @@ function NavBar() {
             <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#link">Link</Nav.Link>
           </Nav>
-          <Button variant="danger" onClick={logoutAndRedirect}>
+          <Button
+            data-testid="LogOutButtonId"
+            variant="danger"
+            onClick={logoutAndRedirect}
+          >
             Log out
           </Button>
         </Navbar.Collapse>
