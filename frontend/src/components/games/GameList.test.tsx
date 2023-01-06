@@ -65,5 +65,9 @@ describe('GameList', () => {
       const card1 = screen.getByTestId("GameCardId1");
       expect(card1).not.toBeUndefined();
     });
+    await waitFor(() => {
+      const card1 = screen.getByTestId("GameCardId2");
+      expect(card1).not.toBeUndefined();
+    });
   })
 });

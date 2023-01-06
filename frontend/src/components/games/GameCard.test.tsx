@@ -15,7 +15,11 @@ const game: Game = {
 
 
 describe('GameCard', () => {
-  
+    it('should display a card', () => {
+        const { getByTestId } = render(<GameCard game={game} />);
+        const gameCard = getByTestId("GameCardId2");
+        expect(gameCard).toBeInTheDocument();
+    })
       
     it('should display the correct game owner name', () => {
         const { getByText } = render(<GameCard game={game} />);
