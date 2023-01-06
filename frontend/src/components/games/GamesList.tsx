@@ -26,7 +26,7 @@ function GameList() {
       <Row>
         {games?.games.map((game, index) => {
           return (
-            <Col xs={6}>
+            <Col key={`CardGame${game.gameId}`} xs={6}>
               <GameCard game={game} />
             </Col>
           );

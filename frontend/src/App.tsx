@@ -3,6 +3,7 @@ import PlayersLogin from "./components/players/PlayersLogin";
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/home/Home";
 import PlayersCreate from "./components/players/PlayersCreate";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

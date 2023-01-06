@@ -1,4 +1,5 @@
 import { render, fireEvent, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import PlayersLogin from "./PlayersLogin";
 import { login } from "../../utils/api/player";
 
@@ -26,10 +27,10 @@ describe("PlayersLogin", () => {
     const loginButton = screen.getByText("Login");
     const registerButton = screen.getByText("Register");
 
-    expect(nameInput).not.toBeUndefined();
-    expect(passwordInput).not.toBeUndefined();
-    expect(loginButton).not.toBeUndefined();
-    expect(registerButton).not.toBeUndefined();
+    expect(nameInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
+    expect(loginButton).toBeInTheDocument();
+    expect(registerButton).toBeInTheDocument();
   });
 
   it("form submission calls login function with correct arguments", async () => {
