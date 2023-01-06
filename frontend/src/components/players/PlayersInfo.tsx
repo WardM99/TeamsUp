@@ -19,7 +19,7 @@ function PlayersInfo() {
   useEffect(() => {
     if (player === undefined) getPlayer();
   });
-  return <span>{player?.name}</span>;
+  return <span data-testid="PlayersInfoId">{player?.name}</span>;
 }
 
 export default PlayersInfo;
