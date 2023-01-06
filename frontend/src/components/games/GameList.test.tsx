@@ -62,8 +62,8 @@ describe('GameList', () => {
     render(<GameList/>)
     expect(getGames).toBeCalledTimes(1);
     await waitFor(() => {
-      expect(screen.getByText("Game of "+game1.owner.name)).not.toBeUndefined();
+      const card1 = screen.getByTestId("GameCardId1");
+      expect(card1).not.toBeUndefined();
     });
-    console.log(screen.getByText("Game of"+game1.owner.name));
   })
 });
