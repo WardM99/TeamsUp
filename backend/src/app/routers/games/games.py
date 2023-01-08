@@ -1,5 +1,5 @@
 """Games routers"""
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
