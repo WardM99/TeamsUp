@@ -32,13 +32,19 @@ describe("NavBar", () => {
       expect(PlayersInfoComponent).toBeInTheDocument();
     });
   });
-
   it("should logout and navigate to /login when logout is pressend", async () => {
     render(<NavBar />);
     const logoutButton = screen.getByTestId("LogOutButtonId");
+
     fireEvent.click(logoutButton);
     expect(logout).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledWith("/login");
+
+    await waitFor(() => {
+      // Is only here so the test don't gives a warning
+      const PlayersInfoComponent = screen.getByTestId("PlayersInfoId");
+      expect(PlayersInfoComponent).toBeInTheDocument();
+    });
   });
 });

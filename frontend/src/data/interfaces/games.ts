@@ -1,4 +1,5 @@
 import { Player } from "./player";
+import { Team } from "./teams";
 
 export interface Game {
   gameId: number;
@@ -6,6 +7,7 @@ export interface Game {
   roundTwoDone: boolean;
   roundThreeDone: boolean;
   owner: Player;
+  teams: Team[];
 }
 
 export interface Games {

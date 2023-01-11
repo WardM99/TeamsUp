@@ -1,5 +1,5 @@
 import * as api from "./api";
-import { getGames } from "./games";
+import { createGame, getGames } from "./games";
 
 jest.mock("./api", () => {
   return {
@@ -63,6 +63,55 @@ describe("getGames", () => {
       throw new Error("unexpected error");
     });
     const games = await getGames();
+    expect(games).toEqual(undefined);
+  });
+});
+
+describe("createGame", () => {
+  it("should return a game that is being made", async () => {
+    const mockResponse = {
+      status: 201,
+      data: {
+        gameId: 1,
+        roundOneDone: false,
+        roundTwoDone: false,
+        roundThreeDone: false,
+        owner: {
+          playerId: 1,
+          name: "John",
+        },
+      },
+    };
+    api.axiosInstance.post = jest.fn().mockReturnValue(mockResponse);
+    const game = await createGame();
+    expect(api.getHeaders).toBeCalledTimes(1);
+    expect(api.axiosInstance.post).toBeCalledTimes(1);
+    expect(api.axiosInstance.post).toBeCalledWith(
+      "/games",
+      {},
+      {
+        headers: { Authorization: `bearer abc` },
+      }
+    );
+    expect(game).toEqual(mockResponse.data);
+  });
+
+  it("should return undefined when the API call fails", async () => {
+    api.axiosInstance.post = jest.fn().mockReturnValue({
+      status: 400,
+      data: { error: "invalid login credentials" },
+    });
+    const games = await createGame();
+    expect(api.getHeaders).toBeCalledTimes(1);
+    expect(games).toEqual(undefined);
+  });
+
+  it("should return undefined when an unexpected error occurs", async () => {
+    api.axiosInstance.post = jest.fn().mockImplementation(() => {
+      throw new Error("unexpected error");
+    });
+    const games = await createGame();
+    expect(api.getHeaders).toBeCalledTimes(1);
     expect(games).toEqual(undefined);
   });
 });

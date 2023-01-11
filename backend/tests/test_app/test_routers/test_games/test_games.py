@@ -24,7 +24,7 @@ async def database_with_data(database_session: AsyncSession):
     await create_team(database_session, "Team2", game1)
     await create_team(database_session, "Team3", game2)
     await create_team(database_session, "Team4", game2)
-    await add_player(database_session, team,player)
+    await add_player(database_session, team, player)
 
 
     return database_session
@@ -43,7 +43,8 @@ async def test_get_all_games(database_with_data: AsyncSession, auth_client: Auth
         assert not game["roundOneDone"]
         assert not game["roundTwoDone"]
         assert not game["roundThreeDone"]
-
+        assert len(game["teams"]) == 2
+    
 
 async def test_make_a_new_game(database_with_data: AsyncSession, auth_client: AuthClient):
     """Test to make a new game"""
@@ -56,6 +57,7 @@ async def test_make_a_new_game(database_with_data: AsyncSession, auth_client: Au
     assert not data["roundTwoDone"]
     assert not data["roundThreeDone"]
     assert data["owner"]["name"] == "Player1"
+    assert data["teams"] == []
 
 
 async def test_my_turn(database_with_data: AsyncSession, auth_client: AuthClient):
