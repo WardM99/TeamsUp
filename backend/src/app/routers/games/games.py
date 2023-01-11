@@ -1,5 +1,5 @@
 """Games routers"""
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -26,7 +26,7 @@ games_router.include_router(card_router, prefix="/{game_id}")
                   dependencies=[Depends(require_player)])
 async def get_games(database: AsyncSession = Depends(get_session)):
     """Get all games"""
-    return ReturnGames(games=await logic_get_all_games(database))
+    return await logic_get_all_games(database)
 
 
 @games_router.post("", response_model=ReturnGame, status_code=status.HTTP_201_CREATED)

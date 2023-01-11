@@ -1,7 +1,7 @@
 """Schemas for a game"""
 from src.database.schemas.utils import OrmModel
 from src.database.schemas.player import ReturnPlayer
-
+from src.database.schemas.team import ReturnTeam
 
 class ReturnGame(OrmModel):
     """Represents a game"""
@@ -10,6 +10,7 @@ class ReturnGame(OrmModel):
     round_two_done: bool
     round_three_done: bool
     owner: ReturnPlayer
+    teams: list[ReturnTeam]
 
 
 class ReturnGames(OrmModel):
