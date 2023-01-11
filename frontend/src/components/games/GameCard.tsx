@@ -1,4 +1,4 @@
-import { useEffect, useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
@@ -8,8 +8,7 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Game } from "../../data/interfaces/games";
 
-import { createTeam, getTeams } from "../../utils/api/teams";
-import { Teams } from "../../data/interfaces/teams";
+import { createTeam } from "../../utils/api/teams";
 
 interface Props {
   game: Game;
@@ -18,28 +17,15 @@ interface Props {
 
 function GameCard(props: Props) {
   const [show, setShow] = useState<boolean>(false);
-  const [teams, setTeams] = useState<Teams>();
   const [teamName, setTeamName] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  async function getTeamsFromApi() {
-    const response = await getTeams(props.game.gameId);
-    setTeams(response);
-  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     handleClose();
     await createTeam(props.game.gameId, teamName);
   }
-
-  useEffect(() => {
-    if (teams === undefined) {
-      getTeamsFromApi();
-    }
-  });
-
   return (
     <>
       <Card data-testid={`GameCardId${props.game.gameId}`}>
@@ -51,7 +37,7 @@ function GameCard(props: Props) {
         </Card.Header>
         <Card.Body>
           <Card.Title>Join a team</Card.Title>
-          {teams?.teams.map((team, index) => {
+          {props.game.teams.map((team, index) => {
             return (
               <Button
                 key={`JoinTeam${team.teamId}`}

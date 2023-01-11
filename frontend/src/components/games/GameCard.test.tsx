@@ -2,6 +2,21 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import GameCard from "./GameCard";
 import { Game } from "../../data/interfaces/games";
+import { Team } from "../../data/interfaces/teams";
+
+const team1: Team = {
+  teamId: 1,
+  gameId: 2,
+  teamName: "team 1",
+  players: [],
+};
+
+const team2: Team = {
+  teamId: 2,
+  gameId: 2,
+  teamName: "team 2",
+  players: [],
+};
 
 const game: Game = {
   gameId: 2,
@@ -12,6 +27,7 @@ const game: Game = {
     playerId: 3,
     name: "Jane",
   },
+  teams: [team1, team2],
 };
 
 describe("GameCard", () => {
@@ -27,13 +43,13 @@ describe("GameCard", () => {
     expect(gameOwnerName).toBeInTheDocument();
   });
 
-  it("should contain a Card.Title element and two Button elements", () => {
+  it("should contain a Card.Title element and two Button elements", async () => {
     render(<GameCard game={game} />);
     const cardTitle = screen.getByText("Join a team");
-    const joinButton1 = screen.getByText("Join team 1");
-    const joinButton2 = screen.getByText("Join team 2");
     expect(cardTitle).toBeInTheDocument();
+    const joinButton1 = screen.getByText("Join team 1");
     expect(joinButton1).toBeInTheDocument();
+    const joinButton2 = screen.getByText("Join team 2");
     expect(joinButton2).toBeInTheDocument();
   });
 

@@ -14,6 +14,7 @@ jest.mock("../../utils/api/games", () => {
       playerId: 1,
       name: "Alice",
     },
+    teams: [],
   };
 
   const game2: Game = {
@@ -25,6 +26,7 @@ jest.mock("../../utils/api/games", () => {
       playerId: 2,
       name: "Bob",
     },
+    teams: [],
   };
   const games: Games = {
     games: [game1, game2],
