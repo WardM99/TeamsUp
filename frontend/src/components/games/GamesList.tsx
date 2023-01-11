@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import { Games } from "../../data/interfaces/games";
 import { createGame, getGames } from "../../utils/api/games";
 import GameCard from "./GameCard";
@@ -37,8 +37,12 @@ function GameList() {
           );
         })}
       </Row>
-      
-      <Button data-testid="createNewGameButton" variant="primary" onClick={createGameFromApi}>
+
+      <Button
+        data-testid="createNewGameButton"
+        variant="primary"
+        onClick={createGameFromApi}
+      >
         Create New Game
       </Button>
     </Container>

@@ -11,7 +11,7 @@ export function getHeaders() {
   const config = {
     headers: {
       Authorization: `${type} ${token}`,
-      accept: 'application/json'
+      accept: "application/json",
     },
   };
   return config;

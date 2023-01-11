@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, act } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import NavBar from "./NavBar";
 import { logout } from "../../utils/api/player";
@@ -35,15 +35,14 @@ describe("NavBar", () => {
   it("should logout and navigate to /login when logout is pressend", async () => {
     render(<NavBar />);
     const logoutButton = screen.getByTestId("LogOutButtonId");
-  
-    act(() => {
-      fireEvent.click(logoutButton);
-    });
+
+    fireEvent.click(logoutButton);
     expect(logout).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledWith("/login");
-    
-    await waitFor(() => { // Is only here so the test don't gives a warning
+
+    await waitFor(() => {
+      // Is only here so the test don't gives a warning
       const PlayersInfoComponent = screen.getByTestId("PlayersInfoId");
       expect(PlayersInfoComponent).toBeInTheDocument();
     });
