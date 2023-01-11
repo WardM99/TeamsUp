@@ -23,7 +23,7 @@ describe("getHeaders", () => {
     expect(config).toEqual({
       headers: {
         Authorization: "bearer abc123",
-        accept: 'application/json'
+        accept: "application/json",
       },
     });
   });

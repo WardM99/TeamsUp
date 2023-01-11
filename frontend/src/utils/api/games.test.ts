@@ -68,7 +68,7 @@ describe("getGames", () => {
 });
 
 describe("createGame", () => {
-  it('should return a game that is being made', async () => {
+  it("should return a game that is being made", async () => {
     const mockResponse = {
       status: 201,
       data: {
@@ -86,12 +86,16 @@ describe("createGame", () => {
     const game = await createGame();
     expect(api.getHeaders).toBeCalledTimes(1);
     expect(api.axiosInstance.post).toBeCalledTimes(1);
-    expect(api.axiosInstance.post).toBeCalledWith("/games", {},{
-      headers: { Authorization: `bearer abc` },
-    });
+    expect(api.axiosInstance.post).toBeCalledWith(
+      "/games",
+      {},
+      {
+        headers: { Authorization: `bearer abc` },
+      }
+    );
     expect(game).toEqual(mockResponse.data);
   });
-  
+
   it("should return undefined when the API call fails", async () => {
     api.axiosInstance.post = jest.fn().mockReturnValue({
       status: 400,
@@ -102,7 +106,7 @@ describe("createGame", () => {
     expect(games).toEqual(undefined);
   });
 
-  it("should return undefined when the API call fails", async () => {
+  it("should return undefined when an unexpected error occurs", async () => {
     api.axiosInstance.post = jest.fn().mockImplementation(() => {
       throw new Error("unexpected error");
     });

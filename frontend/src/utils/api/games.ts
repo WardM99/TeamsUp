@@ -18,7 +18,7 @@ export async function createGame(): Promise<Game | undefined> {
   try {
     const config = getHeaders();
     const response = await axiosInstance.post("/games", {}, config);
-    if(response.status === 201) {
+    if (response.status === 201) {
       const game = response.data as Game;
       return game;
     }
