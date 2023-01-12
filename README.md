@@ -29,7 +29,7 @@ poetry install
 ### Setup backend database
 
 ```shell
-alembic upgrade --head
+alembic upgrade head
 ```
 
 ### Setup backend server
