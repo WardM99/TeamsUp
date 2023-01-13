@@ -32,8 +32,7 @@ function GameCard(props: Props) {
 
   async function joinTeamApi(teamId: number) {
     const team: Team | undefined = await joinTeam(props.game.gameId, teamId);
-    if(team !== undefined)
-      navigate(`/game/${props.game.gameId}`);
+    if (team !== undefined) navigate(`/game/${props.game.gameId}`);
   }
 
   return (

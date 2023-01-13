@@ -15,7 +15,7 @@ function App() {
         <Route path="/login" element={<PlayersLogin />} />
         <Route path="/register" element={<PlayersCreate />} />
         <Route path="/" element={<Home />} />
-        <Route path="/game/:gameId" element={<GameLobby /> } />
+        <Route path="/game/:gameId" element={<GameLobby />} />
       </Routes>
     </>
   );
