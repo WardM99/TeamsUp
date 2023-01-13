@@ -36,6 +36,12 @@ jest.mock("../../utils/api/games", () => {
   };
 });
 
+const navigateMock = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => navigateMock,
+}));
+
 describe("GameList", () => {
   it("should render a list of games", async () => {
     render(<GameList />);

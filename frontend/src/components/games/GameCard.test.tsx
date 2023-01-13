@@ -30,6 +30,12 @@ const game: Game = {
   teams: [team1, team2],
 };
 
+const navigateMock = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => navigateMock,
+}));
+
 describe("GameCard", () => {
   it("should display a card", () => {
     render(<GameCard game={game} />);

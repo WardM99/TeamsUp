@@ -21,7 +21,7 @@ jest.mock("../../utils/api/player", () => {
 
 describe("PlayersLogin", () => {
   it("there is a nameInput, passwordInput, loginButton and registerButton", async () => {
-    render(<PlayersLogin></PlayersLogin>);
+    render(<PlayersLogin setIsLoggedIn={jest.fn()}></PlayersLogin>);
     const nameInput = screen.getByLabelText("Name");
     const passwordInput = screen.getByLabelText("Password");
     const loginButton = screen.getByText("Login");
@@ -34,7 +34,8 @@ describe("PlayersLogin", () => {
   });
 
   it("form submission calls login function with correct arguments", async () => {
-    render(<PlayersLogin></PlayersLogin>);
+    const setIsLoggedIn = jest.fn();
+    render(<PlayersLogin setIsLoggedIn={setIsLoggedIn}></PlayersLogin>);
     const nameInput = screen.getByLabelText("Name");
     const passwordInput = screen.getByLabelText("Password");
     const loginButton = screen.getByText("Login");
@@ -46,10 +47,12 @@ describe("PlayersLogin", () => {
     expect(login).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledWith("/");
+    expect(setIsLoggedIn).toBeCalled();
   });
 
   it("no navigation when password is wrong", async () => {
-    render(<PlayersLogin></PlayersLogin>);
+    const setIsLoggedIn = jest.fn();
+    render(<PlayersLogin setIsLoggedIn={setIsLoggedIn}></PlayersLogin>);
     const nameInput = screen.getByLabelText("Name");
     const passwordInput = screen.getByLabelText("Password");
     const loginButton = screen.getByText("Login");
@@ -60,10 +63,12 @@ describe("PlayersLogin", () => {
 
     expect(login).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledTimes(0);
+    expect(setIsLoggedIn).not.toBeCalled();
   });
 
   it("no navigation when name is wrong", async () => {
-    render(<PlayersLogin></PlayersLogin>);
+    const setIsLoggedIn = jest.fn();
+    render(<PlayersLogin setIsLoggedIn={setIsLoggedIn}></PlayersLogin>);
     const nameInput = screen.getByLabelText("Name");
     const passwordInput = screen.getByLabelText("Password");
     const loginButton = screen.getByText("Login");
@@ -74,10 +79,12 @@ describe("PlayersLogin", () => {
 
     expect(login).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledTimes(0);
+    expect(setIsLoggedIn).not.toBeCalled();
   });
 
-  it("no createPlayer when name is not filled in", async () => {
-    render(<PlayersLogin></PlayersLogin>);
+  it("no navigation when name is not filled in", async () => {
+    const setIsLoggedIn = jest.fn();
+    render(<PlayersLogin setIsLoggedIn={setIsLoggedIn}></PlayersLogin>);
     const passwordInput = screen.getByLabelText("Password");
     const loginButton = screen.getByText("Login");
 
@@ -85,10 +92,12 @@ describe("PlayersLogin", () => {
     await fireEvent.click(loginButton);
 
     expect(login).toBeCalledTimes(0);
+    expect(setIsLoggedIn).not.toBeCalled();
   });
 
-  it("no createPlayer when password is not filled in", async () => {
-    render(<PlayersLogin></PlayersLogin>);
+  it("no navigation when password is not filled in", async () => {
+    const setIsLoggedIn = jest.fn();
+    render(<PlayersLogin setIsLoggedIn={setIsLoggedIn}></PlayersLogin>);
     const nameInput = screen.getByLabelText("Name");
     const loginButton = screen.getByText("Login");
 
@@ -96,10 +105,11 @@ describe("PlayersLogin", () => {
     await fireEvent.click(loginButton);
 
     expect(login).toBeCalledTimes(0);
+    expect(setIsLoggedIn).not.toBeCalled();
   });
 
   it("register button navigates to /register", async () => {
-    render(<PlayersLogin></PlayersLogin>);
+    render(<PlayersLogin setIsLoggedIn={jest.fn()}></PlayersLogin>);
     const registerButton = screen.getByText("Register");
     expect(registerButton.getAttribute("href")).toEqual("/register");
   });

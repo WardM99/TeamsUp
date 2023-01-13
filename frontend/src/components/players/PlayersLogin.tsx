@@ -4,7 +4,11 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { login } from "../../utils/api/player";
 
-function PlayersLogin() {
+interface Props {
+  setIsLoggedIn: (value: boolean) => void;
+}
+
+function PlayersLogin(props: Props) {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,6 +17,7 @@ function PlayersLogin() {
     event.preventDefault();
     const loginCode = await login(name, password);
     if (loginCode === 200) {
+      props.setIsLoggedIn(true);
       navigate("/");
     }
   }

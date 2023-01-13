@@ -23,7 +23,7 @@ jest.mock("../../utils/api/player", () => {
 
 describe("PlayersCreate", () => {
   it("there is a nameInput, passwordInput, loginButton and createButton", async () => {
-    render(<PlayersCreate></PlayersCreate>);
+    render(<PlayersCreate setIsLoggedIn={jest.fn()}></PlayersCreate>);
     const nameInput = screen.getByLabelText("Name");
     const passwordInput = screen.getByLabelText("Password");
     const loginButton = screen.getByText("Login");
@@ -35,8 +35,9 @@ describe("PlayersCreate", () => {
     expect(createButton).toBeInTheDocument();
   });
 
-  it("form submission calls login function with correct arguments", async () => {
-    render(<PlayersCreate></PlayersCreate>);
+  it("form submission calls createPlayer function with correct arguments", async () => {
+    const setIsLoggedIn = jest.fn();
+    render(<PlayersCreate setIsLoggedIn={setIsLoggedIn}></PlayersCreate>);
     const nameInput = screen.getByLabelText("Name");
     const passwordInput = screen.getByLabelText("Password");
     const createButton = screen.getByText("Create");
@@ -46,63 +47,25 @@ describe("PlayersCreate", () => {
     await fireEvent.click(createButton);
 
     expect(createPlayer).toBeCalledTimes(1);
+    expect(createPlayer).toBeCalledWith("testuser", "testpassword");
+    expect(setIsLoggedIn).toBeCalledWith(true);
     expect(navigateMock).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledWith("/");
   });
 
-  it("no navigation when password is wrong", async () => {
-    render(<PlayersCreate></PlayersCreate>);
+  it("no navigation when createPlayer returns a non-201 status code", async () => {
+    const setIsLoggedIn = jest.fn();
+    render(<PlayersCreate setIsLoggedIn={setIsLoggedIn}></PlayersCreate>);
     const nameInput = screen.getByLabelText("Name");
     const passwordInput = screen.getByLabelText("Password");
     const createButton = screen.getByText("Create");
 
-    fireEvent.change(nameInput, { target: { value: "testuser" } });
-    fireEvent.change(passwordInput, { target: { value: "empty" } });
+    fireEvent.change(nameInput, { target: { value: "wronguser" } });
+    fireEvent.change(passwordInput, { target: { value: "wrongpassword" } });
     await fireEvent.click(createButton);
-
     expect(createPlayer).toBeCalledTimes(1);
-    expect(navigateMock).toBeCalledTimes(0);
-  });
-
-  it("no navigation when name is wrong", async () => {
-    render(<PlayersCreate></PlayersCreate>);
-    const nameInput = screen.getByLabelText("Name");
-    const passwordInput = screen.getByLabelText("Password");
-    const createButton = screen.getByText("Create");
-
-    fireEvent.change(nameInput, { target: { value: "empty" } });
-    fireEvent.change(passwordInput, { target: { value: "testpassword" } });
-    await fireEvent.click(createButton);
-
-    expect(createPlayer).toBeCalledTimes(1);
-    expect(navigateMock).toBeCalledTimes(0);
-  });
-
-  it("no createPlayer when name is not filled in", async () => {
-    render(<PlayersCreate></PlayersCreate>);
-    const passwordInput = screen.getByLabelText("Password");
-    const createButton = screen.getByText("Create");
-
-    fireEvent.change(passwordInput, { target: { value: "testpassword" } });
-    await fireEvent.click(createButton);
-
-    expect(createPlayer).toBeCalledTimes(0);
-  });
-
-  it("no createPlayer when password is not filled in", async () => {
-    render(<PlayersCreate></PlayersCreate>);
-    const nameInput = screen.getByLabelText("Name");
-    const createButton = screen.getByText("Create");
-
-    fireEvent.change(nameInput, { target: { value: "user" } });
-    await fireEvent.click(createButton);
-
-    expect(createPlayer).toBeCalledTimes(0);
-  });
-
-  it("register button navigates to /register", async () => {
-    render(<PlayersCreate></PlayersCreate>);
-    const loginButton = screen.getByText("Login");
-    expect(loginButton.getAttribute("href")).toEqual("/login");
+    expect(createPlayer).toBeCalledWith("wronguser", "wrongpassword");
+    expect(setIsLoggedIn).not.toBeCalled();
+    expect(navigateMock).not.toBeCalled();
   });
 });

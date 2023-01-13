@@ -35,3 +35,24 @@ export async function createTeam(
     return undefined;
   }
 }
+
+export async function joinTeam(
+  gameId: number,
+  teamId: number
+): Promise<Team | undefined> {
+  try {
+    const config = getHeaders();
+    const response = await axiosInstance.post(
+      `/games/${gameId}/teams/${teamId}`,
+      {},
+      config
+    );
+    if (response.status === 200) {
+      const team = response.data as Team;
+      return team;
+    }
+    return undefined;
+  } catch (error) {
+    return undefined;
+  }
+}

@@ -6,10 +6,6 @@ import { logout } from "../../utils/api/player";
 jest.mock("../../utils/api/player", () => {
   return {
     logout: jest.fn(),
-    currentPlayer: jest.fn().mockReturnValue({
-      playerId: 1,
-      name: "Jos",
-    }),
   };
 });
 
@@ -22,7 +18,15 @@ jest.mock("react-router-dom", () => ({
 
 describe("NavBar", () => {
   it("should render the component", async () => {
-    render(<NavBar />);
+    const props = {
+      player: {
+        playerId: 1,
+        name: "Jos",
+      },
+      isLoggedIn: true,
+      setIsLoggedIn: jest.fn(),
+    };
+    render(<NavBar {...props} />);
     const NavBarComponent = screen.getByTestId("NavBarId");
     const logoutButton = screen.getByTestId("LogOutButtonId");
     expect(NavBarComponent).toBeInTheDocument();
@@ -33,11 +37,20 @@ describe("NavBar", () => {
     });
   });
   it("should logout and navigate to /login when logout is pressend", async () => {
-    render(<NavBar />);
+    const props = {
+      player: {
+        playerId: 1,
+        name: "Jos",
+      },
+      isLoggedIn: true,
+      setIsLoggedIn: jest.fn(),
+    };
+    render(<NavBar {...props} />);
     const logoutButton = screen.getByTestId("LogOutButtonId");
 
     fireEvent.click(logoutButton);
     expect(logout).toBeCalledTimes(1);
+    expect(props.setIsLoggedIn).toBeCalledWith(false);
     expect(navigateMock).toBeCalledTimes(1);
     expect(navigateMock).toBeCalledWith("/login");
 
