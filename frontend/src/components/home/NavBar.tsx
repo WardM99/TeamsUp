@@ -5,19 +5,30 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import PlayersInfo from "../players/PlayersInfo";
 import { logout } from "../../utils/api/player";
+import { Player } from "../../data/interfaces";
 
-function NavBar() {
+interface Props {
+  player: Player | undefined;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+}
+
+function NavBar(props: Props) {
   const navigate = useNavigate();
 
   function logoutAndRedirect() {
     logout();
+    props.setIsLoggedIn(false);
     navigate("/login");
   }
+
+  if (!props.isLoggedIn || props.player === undefined) return <div></div>;
+
   return (
     <Navbar bg="light" expand="lg" data-testid="NavBarId">
       <Container>
         <Navbar.Brand href="/">
-          <PlayersInfo />
+          <PlayersInfo playerName={props.player.name} />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

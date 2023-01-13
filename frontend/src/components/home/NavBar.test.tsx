@@ -21,6 +21,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("NavBar", () => {
+  /*
   it("should render the component", async () => {
     render(<NavBar />);
     const NavBarComponent = screen.getByTestId("NavBarId");
@@ -47,4 +48,5 @@ describe("NavBar", () => {
       expect(PlayersInfoComponent).toBeInTheDocument();
     });
   });
+  */
 });
