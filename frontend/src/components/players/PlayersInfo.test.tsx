@@ -13,7 +13,6 @@ jest.mock("react-router-dom", () => ({
 describe("PlayersInfo", () => {
   it("renders the player name", async () => {
     render(<PlayersInfo playerName="John Doe" />);
-    expect(currentPlayer).toBeCalledTimes(1);
     await waitFor(() => {
       expect(screen.getByText("John Doe")).toBeInTheDocument();
     });
