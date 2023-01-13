@@ -1,4 +1,5 @@
 import { useState, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
@@ -7,8 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Game } from "../../data/interfaces/games";
+import { Team } from "../../data/interfaces/teams";
 
-import { createTeam } from "../../utils/api/teams";
+import { createTeam, joinTeam } from "../../utils/api/teams";
 
 interface Props {
   game: Game;
@@ -20,12 +22,20 @@ function GameCard(props: Props) {
   const [teamName, setTeamName] = useState("");
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const navigate = useNavigate();
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     handleClose();
     await createTeam(props.game.gameId, teamName);
   }
+
+  async function joinTeamApi(teamId: number) {
+    const team: Team | undefined = await joinTeam(props.game.gameId, teamId);
+    if(team !== undefined)
+      navigate(`/game/${props.game.gameId}`);
+  }
+
   return (
     <>
       <Card data-testid={`GameCardId${props.game.gameId}`}>
@@ -41,6 +51,7 @@ function GameCard(props: Props) {
             return (
               <Button
                 key={`JoinTeam${team.teamId}`}
+                onClick={() => joinTeamApi(team.teamId)}
               >{`Join ${team.teamName}`}</Button>
             );
           })}
