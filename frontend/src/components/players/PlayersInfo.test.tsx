@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { currentPlayer } from "../../utils/api/player";
 import PlayersInfo from "./PlayersInfo";
 
 const navigateMock = jest.fn();

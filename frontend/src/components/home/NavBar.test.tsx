@@ -24,8 +24,8 @@ describe("NavBar", () => {
         name: "Jos",
       },
       isLoggedIn: true,
-      setIsLoggedIn: jest.fn()
-    }
+      setIsLoggedIn: jest.fn(),
+    };
     render(<NavBar {...props} />);
     const NavBarComponent = screen.getByTestId("NavBarId");
     const logoutButton = screen.getByTestId("LogOutButtonId");
@@ -43,8 +43,8 @@ describe("NavBar", () => {
         name: "Jos",
       },
       isLoggedIn: true,
-      setIsLoggedIn: jest.fn()
-    }
+      setIsLoggedIn: jest.fn(),
+    };
     render(<NavBar {...props} />);
     const logoutButton = screen.getByTestId("LogOutButtonId");
 
