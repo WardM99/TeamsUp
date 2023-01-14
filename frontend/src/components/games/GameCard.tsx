@@ -9,11 +9,13 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { Game } from "../../data/interfaces/games";
 import { Team } from "../../data/interfaces/teams";
+import { Player } from "../../data/interfaces"; 
 
 import { createTeam, joinTeam } from "../../utils/api/teams";
 
 interface Props {
   game: Game;
+  player: Player | undefined;
   // handleClick: (edition: Edition) => Promise<void>;
 }
 
@@ -23,6 +25,7 @@ function GameCard(props: Props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
+  let disabled = true
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -34,6 +37,9 @@ function GameCard(props: Props) {
     const team: Team | undefined = await joinTeam(props.game.gameId, teamId);
     if (team !== undefined) navigate(`/game/${props.game.gameId}`);
   }
+  
+  if(props.player !== undefined && props.game.owner.playerId === props.player.playerId)
+    disabled = false;
 
   return (
     <>
@@ -56,7 +62,7 @@ function GameCard(props: Props) {
           })}
         </Card.Body>
         <Card.Footer>
-          <Button variant="success" onClick={handleShow}>
+          <Button variant="success" onClick={handleShow} disabled={disabled}>
             Add Team
           </Button>
         </Card.Footer>
@@ -85,7 +91,7 @@ function GameCard(props: Props) {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" disabled={disabled}>
               Make Team
             </Button>
           </Modal.Footer>

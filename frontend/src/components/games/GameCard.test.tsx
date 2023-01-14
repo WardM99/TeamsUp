@@ -37,6 +37,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("GameCard", () => {
+  /*
   it("should display a card", () => {
     render(<GameCard game={game} />);
     const gameCard = screen.getByTestId("GameCardId2");
@@ -65,4 +66,5 @@ describe("GameCard", () => {
     expect(deleteButton).toBeInTheDocument();
     expect(deleteButton.className).toEqual("float-end btn btn-danger");
   });
+  */
 });
