@@ -1,6 +1,7 @@
 """all crud operations for a card"""
 # pylint: disable=C0121
 from random import choice
+from random import randint
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -60,3 +61,65 @@ async def get_unguessed_cards(database: AsyncSession, game: Game) -> list[Card]:
     result = await database.execute(query)
     value = result.unique().scalars().all()
     return value
+
+
+async def add_cards_to_database(database: AsyncSession) -> None:
+    """add a bunch of cards to the database"""
+    topics = [
+        "astronomy",
+        "telephone",
+        "astronomy",
+        "royalty",
+        "monkeys",
+        "pipe organs",
+        "pilots",
+        "football",
+        "volcanoes",
+        "cards",
+        "fortune tellers",
+        "diving",
+        "vanilla",
+        "hunting",
+        "Central America",
+        "skating",
+        "parachuting",
+        "pipe organs",
+        "fencing",
+        "Asia",
+        "blacksmiths",
+        "farmers markets",
+        "giants",
+        "toads",
+        "diving",
+        "cows",
+        "coffin",
+        "sports",
+        "diamond",
+        "pottery",
+        "shoes",
+        "shoes",
+        "Olympic games",
+        "cheese",
+        "Europe",
+        "medicine",
+        "money",
+        "clowns",
+        "Africa",
+        "archery",
+        "gypsies",
+        "canoes",
+        "nurses",
+        "bakeries",
+        "circus",
+        "bohemians",
+        "elephants",
+        "coffee",
+        "dogs",
+        "crime"
+    ]
+    print("ADDING CARDS")
+    for i in range(50):
+        card: Card = Card(points=randint(1,10), topic=topics[i])
+        database.add(card)
+        await database.commit()
+    print("CARDS ADDED")

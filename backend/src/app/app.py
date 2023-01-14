@@ -1,14 +1,18 @@
 """Startup of FastAPI application"""
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
+
 from starlette.middleware.cors import CORSMiddleware
 from environs import Env
 from alembic import config, script
 from alembic.runtime import migration
 
 from src.app.exceptions.handler import install_handlers
-from src.database.database import engine
+from src.database.database import engine, get_session
 from src.database.exceptions import PendingMigrationsException
 from src.app.routers.players.players import players_router
+from src.app.logic.cards import logic_add_cards_to_database
 from .routers import games_router
 
 
@@ -56,3 +60,8 @@ async def init_database(): # pragma: no cover
 async def root():
     """give a Hello World message"""
     return {"message": "Hello World"}
+
+@app.post("/cards", status_code=status.HTTP_201_CREATED)
+async def add_cards(database: AsyncSession = Depends(get_session)):
+    """add cards"""
+    await logic_add_cards_to_database(database)
