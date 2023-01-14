@@ -9,8 +9,13 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import { Button } from "react-bootstrap";
+import { Player } from "../../data/interfaces";
 
-function GameLobby() {
+interface Props {
+  player: Player | undefined;
+}
+
+function GameLobby(props: Props) {
   const { gameId } = useParams();
   const [teams, setTeams] = useState<Teams>();
 
@@ -26,6 +31,10 @@ function GameLobby() {
     <Container data-testid="ListGamesId">
       <Row>
         {teams?.teams.map((team, index) => {
+          const playersIdList = team?.players.map((player) => {
+            return player.playerId;
+          });
+          const disabled = props.player !== undefined && playersIdList.includes(props.player.playerId);
           return (
             <Col key={`TeamCardId${team.teamId}`} xs={6}>
               <Card data-testid={`TeamCardId${team.teamId}`}>
@@ -34,7 +43,7 @@ function GameLobby() {
                   <Card.Title>Members</Card.Title>
                   <Card.Text>
                     <ListGroup>
-                      {team?.players.map((player, index) => {
+                      {team?.players.map((player) => {
                         return (
                           <ListGroup.Item
                             key={`ListGroupItem${player.playerId}`}
@@ -53,6 +62,7 @@ function GameLobby() {
                     onClick={() => {
                       joinTeam(team.gameId, team.teamId);
                     }}
+                    disabled={disabled}
                   >
                     Join Team
                   </Button>

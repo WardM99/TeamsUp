@@ -6,8 +6,13 @@ import Button from "react-bootstrap/Button";
 import { Games } from "../../data/interfaces/games";
 import { createGame, getGames } from "../../utils/api/games";
 import GameCard from "./GameCard";
+import { Player } from "../../data/interfaces";
 
-function GameList() {
+interface Props {
+  player: Player | undefined;
+}
+
+function GameList(props: Props) {
   const [games, setGames] = useState<Games>();
 
   async function getGamesFromApi() {
@@ -32,7 +37,7 @@ function GameList() {
         {games?.games.map((game, index) => {
           return (
             <Col key={`CardGame${game.gameId}`} xs={6}>
-              <GameCard game={game} />
+              <GameCard game={game} player={props.player} />
             </Col>
           );
         })}
