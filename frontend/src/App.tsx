@@ -19,9 +19,7 @@ function App() {
   async function getPlayerApi() {
     if (player === undefined) {
       const response = await currentPlayer();
-      if (response === undefined) {
-        navigate("/login");
-      } else {
+      if (response !== undefined) {
         setPlayer(response);
         setIsLoggedIn(true);
       }
