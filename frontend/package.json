@@ -71,7 +71,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "lint": "0.8.19",
     "prettier": "2.8.2",
-    "ts-jest": "^29.0.4",
+    "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1"
   }
 }
