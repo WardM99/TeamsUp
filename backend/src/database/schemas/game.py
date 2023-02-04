@@ -13,6 +13,15 @@ class ReturnGame(OrmModel):
     owner: ReturnPlayer
     teams: list[ReturnTeam]
 
+class ReturnGameStatus(OrmModel):
+    """Represents the game statuses"""
+    game_id: int
+    round_one_done: bool
+    round_two_done: bool
+    round_three_done: bool
+    may_suggests_cards: bool
+    owner: ReturnPlayer
+
 
 class ReturnGames(OrmModel):
     """Represents a list of games"""

@@ -10,7 +10,7 @@ from src.app.logic.games import (logic_get_all_games,
                                  logic_get_game_by_id,
                                  logic_next_round)
 from src.app.logic.players import require_player
-from src.database.schemas.game import ReturnGames, ReturnGame, ReturnTurn
+from src.database.schemas.game import ReturnGames, ReturnGame, ReturnTurn, ReturnGameStatus
 from src.database.models import Player, Game
 
 from src.app.routers.games.teams.teams import teams_router
@@ -56,3 +56,10 @@ async def next_status(database: AsyncSession = Depends(get_session),
                       player: Player = Depends(require_player)):
     """Goes to the next round"""
     await logic_next_round(database, game, player)
+
+
+@games_router.get("/{game_id}", status_code=status.HTTP_200_OK, response_model=ReturnGameStatus)
+async def get_game_status(game_id: int, database: AsyncSession = Depends(get_session)):
+    """Gives the game status"""
+    game: Game = await logic_get_game_by_id(game_id, database)
+    return game

@@ -63,6 +63,14 @@ async def get_unguessed_cards(database: AsyncSession, game: Game) -> list[Card]:
     return value
 
 
+async def get_cards(database: AsyncSession) -> list[Card]:
+    """get all cards"""
+    query = select(Card)
+    result = await database.execute(query)
+    value = result.unique().scalars().all()
+    return value
+
+
 async def add_cards_to_database(database: AsyncSession) -> None:
     """add a bunch of cards to the database"""
     topics = [

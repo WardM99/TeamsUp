@@ -63,17 +63,18 @@ async def logic_get_your_turn(database: AsyncSession, game_id: int|None, player:
 
 async def logic_next_round(database: AsyncSession, game: Game, player: Player) -> None:
     """goed to the next round"""
-    current_team: Team = game.teams[game.next_team_index]
-    current_player: Player = current_team.players[current_team.next_player_index]
-    if current_player != player:
-        return
     cards: list[Card] = await get_unguessed_cards(database, game)
 
     if len(cards) == 0:
-        await reset_cards_game(database, game)
-        if not game.may_suggests_cards and not game.round_one_done:
-            await start_suggests_cards(database, game)
-        else:
-            await start_next_round(database, game)
+        if player == game.owner:
+            await reset_cards_game(database, game)
+            if not game.may_suggests_cards and not game.round_one_done:
+                await start_suggests_cards(database, game)
+            else:
+                await start_next_round(database, game)
     else:
+        current_team: Team = game.teams[game.next_team_index]
+        current_player: Player = current_team.players[current_team.next_player_index]
+        if current_player != player:
+            return
         await next_player(database, game)
