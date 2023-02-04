@@ -37,21 +37,41 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("GameCard", () => {
-  /*
   it("should display a card", () => {
-    render(<GameCard game={game} />);
+    const props = {
+      player: {
+        playerId: 1,
+        name: "Jos",
+      },
+      game,
+    };
+    render(<GameCard {...props} />);
     const gameCard = screen.getByTestId("GameCardId2");
     expect(gameCard).toBeInTheDocument();
   });
 
   it("should display the correct game owner name", () => {
-    render(<GameCard game={game} />);
+    const props = {
+      player: {
+        playerId: 1,
+        name: "Jos",
+      },
+      game,
+    };
+    render(<GameCard {...props} />);
     const gameOwnerName = screen.getByText("Game of " + game.owner.name);
     expect(gameOwnerName).toBeInTheDocument();
   });
 
   it("should contain a Card.Title element and two Button elements", async () => {
-    render(<GameCard game={game} />);
+    const props = {
+      player: {
+        playerId: 1,
+        name: "Jos",
+      },
+      game,
+    };
+    render(<GameCard {...props} />);
     const cardTitle = screen.getByText("Join a team");
     expect(cardTitle).toBeInTheDocument();
     const joinButton1 = screen.getByText("Join team 1");
@@ -61,10 +81,16 @@ describe("GameCard", () => {
   });
 
   it("should contain a Button element with the correct variant and icon", () => {
-    render(<GameCard game={game} />);
+    const props = {
+      player: {
+        playerId: 1,
+        name: "Jos",
+      },
+      game,
+    };
+    render(<GameCard {...props} />);
     const deleteButton = screen.getAllByRole("button")[0];
     expect(deleteButton).toBeInTheDocument();
     expect(deleteButton.className).toEqual("float-end btn btn-danger");
   });
-  */
 });
