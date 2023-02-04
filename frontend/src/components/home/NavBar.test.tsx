@@ -51,8 +51,6 @@ describe("NavBar", () => {
     fireEvent.click(logoutButton);
     expect(logout).toBeCalledTimes(1);
     expect(props.setIsLoggedIn).toBeCalledWith(false);
-    expect(navigateMock).toBeCalledTimes(1);
-    expect(navigateMock).toBeCalledWith("/login");
 
     await waitFor(() => {
       // Is only here so the test don't gives a warning

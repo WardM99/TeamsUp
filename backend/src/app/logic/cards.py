@@ -7,7 +7,8 @@ from src.database.crud.card import (get_card_by_id,
                                     get_random_card,
                                     update_card,
                                     reset_cards_game,
-                                    add_cards_to_database)
+                                    add_cards_to_database,
+                                    get_cards)
 
 async def logic_add_card_to_game(database: AsyncSession, game: Game, card_id: int) -> None:
     """Logic to add a card to a game"""
@@ -35,3 +36,8 @@ async def logic_reset_cards(database: AsyncSession, game: Game) -> None:
 async def logic_add_cards_to_database(database: AsyncSession) -> None:
     """Logic to add cards to database"""
     await add_cards_to_database(database)
+
+
+async def logic_get_cards(database: AsyncSession) -> list[Card]:
+    """Logic to get all cards"""
+    return await get_cards(database)

@@ -4,7 +4,7 @@ import PlayersLogin from "./components/players/PlayersLogin";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import PlayersCreate from "./components/players/PlayersCreate";
 import "bootstrap/dist/css/bootstrap.min.css";
-import GameLobby from "./components/games/GameLobby";
+import GameLobby from "./components/games/states/GameLobby";
 import NavBar from "./components/home/NavBar";
 import { Player } from "./data/interfaces";
 import { currentPlayer } from "./utils/api/player";
@@ -39,6 +39,10 @@ function App() {
     getPlayerApi();
   });
 
+  if (!isLoggedIn) {
+    return <PlayersLogin setIsLoggedIn={setIsLoggedIn} />;
+  }
+
   return (
     <>
       <NavBar
@@ -55,7 +59,7 @@ function App() {
           path="/register"
           element={<PlayersCreate setIsLoggedIn={setIsLoggedIn} />}
         />
-        <Route path="/" element={<GameList player={player}/>} />
+        <Route path="/" element={<GameList player={player} />} />
         <Route path="/game/:gameId" element={<GameLobby player={player} />} />
       </Routes>
     </>

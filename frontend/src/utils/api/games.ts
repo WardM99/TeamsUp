@@ -27,3 +27,13 @@ export async function createGame(): Promise<Game | undefined> {
     return undefined;
   }
 }
+
+export async function nextStatus(gameId: Number): Promise<Number> {
+  try {
+    const config = getHeaders();
+    const response = await axiosInstance.patch(`/games/${gameId}`, {}, config);
+    return response.status;
+  } catch (error) {
+    return 500;
+  }
+}

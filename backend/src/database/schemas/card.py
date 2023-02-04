@@ -9,6 +9,10 @@ class ReturnCard(OrmModel):
     topic: str
 
 
+class ReturnCardList(OrmModel):
+    """Represents a list of cards"""
+    cards: list[ReturnCard]
+
 class InputCard(BaseModel):
     """Input of a card"""
     card_id: int
