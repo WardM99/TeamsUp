@@ -16,7 +16,7 @@ from src.database.models import Player, Game
 from src.app.routers.games.teams.teams import teams_router
 from src.app.routers.games.cards.cards import card_router
 
-games_router = APIRouter(prefix=("/games"))
+games_router = APIRouter(prefix="/games")
 
 games_router.include_router(teams_router, prefix="/{game_id}")
 games_router.include_router(card_router, prefix="/{game_id}")

@@ -12,7 +12,7 @@ from src.app.logic.players import ( logic_make_new_player,
 from src.database.models import Player
 from src.database.schemas.player import Token, InputPlayer, ReturnPlayer
 
-players_router = APIRouter(prefix=("/players"))
+players_router = APIRouter(prefix="/players")
 
 @players_router.post("", response_model=Token, status_code=status.HTTP_201_CREATED)
 async def new_player(input_player: InputPlayer, database: AsyncSession = Depends(get_session)):
