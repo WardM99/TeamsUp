@@ -73,11 +73,11 @@ function GameLobby(props: Props) {
                   <Button
                     variant="primary"
                     onClick={() => {
-                      joinTeam(team.gameId, team.teamId);
+                      joinTeam(Number(gameId), team.teamId);
                     }}
                     disabled={disabled}
                   >
-                    Join Team
+                    Join {team.teamName}
                   </Button>
                 </Card.Footer>
               </Card>
