@@ -35,9 +35,10 @@ function GameLobby(props: Props) {
   }
 
   useEffect(() => {
-    if (teams === undefined) getTeamsApi();
-    if (cards === undefined) getCardsApi();
-  });
+    getTeamsApi();
+    getCardsApi();
+    // eslint-disable-next-line
+  }, [gameId]);
   return (
     <Container data-testid="GameLobby">
       <Row>
@@ -54,7 +55,6 @@ function GameLobby(props: Props) {
                 <Card.Header>{team.teamName}</Card.Header>
                 <Card.Body>
                   <Card.Title>Members</Card.Title>
-                  <Card.Text>
                     <ListGroup>
                       {team?.players.map((player) => {
                         return (
@@ -67,7 +67,6 @@ function GameLobby(props: Props) {
                         );
                       })}
                     </ListGroup>
-                  </Card.Text>
                 </Card.Body>
                 <Card.Footer>
                   <Button
@@ -102,7 +101,7 @@ function GameLobby(props: Props) {
           <Carousel variant="dark">
             {cards?.cards.map((card) => {
               return (
-                <Carousel.Item>
+                <Carousel.Item key={`CarouselItem${card.cardId}`}>
                   <Card
                     key={`CardCardId${card.cardId}`}
                     className="text-center"
