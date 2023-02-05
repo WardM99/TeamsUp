@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -14,12 +13,9 @@ interface Props {
 }
 
 function NavBar(props: Props) {
-  const navigate = useNavigate();
-
   function logoutAndRedirect() {
     logout();
     props.setIsLoggedIn(false);
-    navigate("/login");
   }
 
   if (!props.isLoggedIn || props.player === undefined) return <div></div>;

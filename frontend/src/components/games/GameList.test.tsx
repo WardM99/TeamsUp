@@ -44,7 +44,13 @@ jest.mock("react-router-dom", () => ({
 
 describe("GameList", () => {
   it("should render a list of games", async () => {
-    render(<GameList />);
+    const props = {
+      player: {
+        playerId: 1,
+        name: "Jos",
+      },
+    };
+    render(<GameList {...props} />);
     expect(getGames).toBeCalledTimes(1);
     await waitFor(() => {
       const card1 = screen.getByTestId("GameCardId1");

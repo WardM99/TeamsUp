@@ -12,7 +12,8 @@ from src.app.exceptions.handler import install_handlers
 from src.database.database import engine, get_session
 from src.database.exceptions import PendingMigrationsException
 from src.app.routers.players.players import players_router
-from src.app.logic.cards import logic_add_cards_to_database
+from src.app.logic.cards import logic_add_cards_to_database, logic_get_cards
+from src.database.schemas.card import ReturnCardList
 from .routers import games_router
 
 
@@ -57,11 +58,18 @@ async def init_database(): # pragma: no cover
 
 
 @app.get("/",)
-async def root():
+async def root(): # pragma: no cover
     """give a Hello World message"""
     return {"message": "Hello World"}
 
 @app.post("/cards", status_code=status.HTTP_201_CREATED)
-async def add_cards(database: AsyncSession = Depends(get_session)):
+async def add_cards(database: AsyncSession = Depends(get_session)): # pragma: no cover
     """add cards"""
     await logic_add_cards_to_database(database)
+
+
+@app.get("/cards", status_code=status.HTTP_200_OK, response_model=ReturnCardList)
+async def get_cards(database: AsyncSession = Depends(get_session)): # pragma: no cover
+    """return cards"""
+    card_list = ReturnCardList(cards=await logic_get_cards(database))
+    return card_list
