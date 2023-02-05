@@ -68,7 +68,7 @@ async def add_cards(database: AsyncSession = Depends(get_session)): # pragma: no
     await logic_add_cards_to_database(database)
 
 
-@app.get("/cards", status_code=status.HTTP_200_OK, response_model=ReturnCardList) 
+@app.get("/cards", status_code=status.HTTP_200_OK, response_model=ReturnCardList)
 async def get_cards(database: AsyncSession = Depends(get_session)): # pragma: no cover
     """return cards"""
     card_list = ReturnCardList(cards=await logic_get_cards(database))
