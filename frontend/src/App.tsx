@@ -19,7 +19,8 @@ function App() {
     if (response !== undefined) {
       setPlayer(response);
       setIsLoggedIn(true);
-    } else { // response failed
+    } else {
+      // response failed
       setPlayer(undefined);
       setIsLoggedIn(false);
     }
@@ -29,7 +30,6 @@ function App() {
     getPlayerApi();
     // eslint-disable-next-line
   }, [isLoggedIn]);
-  
 
   return (
     <>
@@ -47,7 +47,10 @@ function App() {
           path="/register"
           element={<PlayersCreate setIsLoggedIn={setIsLoggedIn} />}
         />
-        <Route path="/" element={<Homescreen player={player} isLoggedIn={isLoggedIn}/>} />
+        <Route
+          path="/"
+          element={<Homescreen player={player} isLoggedIn={isLoggedIn} />}
+        />
         <Route path="/game/:gameId" element={<GameLobby player={player} />} />
       </Routes>
     </>

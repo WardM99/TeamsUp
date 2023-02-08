@@ -37,3 +37,17 @@ export async function nextStatus(gameId: Number): Promise<Number> {
     return 500;
   }
 }
+
+export async function gameStatus(gameId: Number): Promise<Game | undefined> {
+  try {
+    const config = getHeaders();
+    const response = await axiosInstance.get(`/games/${gameId}`, config);
+    if(response.status === 200){
+      const game = response.data as Game;
+      return game;
+    }
+    return undefined
+  } catch(error) {
+    return undefined;
+  }
+}

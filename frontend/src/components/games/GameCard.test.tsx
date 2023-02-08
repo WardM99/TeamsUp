@@ -23,6 +23,7 @@ const game: Game = {
   roundOneDone: false,
   roundTwoDone: true,
   roundThreeDone: false,
+  maySuggestsCards: false,
   owner: {
     playerId: 3,
     name: "Jane",
