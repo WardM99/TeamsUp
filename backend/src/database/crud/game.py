@@ -2,6 +2,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
+from src.database.crud.team import get_all_teams_from_game
 
 from src.database.models import Game, Player, Team
 
@@ -45,9 +46,10 @@ async def start_suggests_cards(database: AsyncSession, game: Game) -> None:
 
 async def next_player(database: AsyncSession, game: Game) -> None:
     """Set next player"""
-    team: Team = game.teams[game.next_team_index]
-    team.next_player_index = (team.next_player_index + 1) % len(team.players)
-    game.next_team_index = (game.next_team_index + 1) % len(team.players)
+    teams: list[Team] = await get_all_teams_from_game(database, game)
+    team: Team = teams[game.next_team_index]
+    team.next_player_index = (team.next_player_index + 1) % (len(team.players) + 1)
+    game.next_team_index = (game.next_team_index + 1) % (len(team.players) + 1)
     await database.commit()
 
 

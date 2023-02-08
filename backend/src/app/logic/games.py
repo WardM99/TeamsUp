@@ -12,6 +12,7 @@ from src.database.crud.team import get_all_teams_from_game
 from src.database.crud.card import reset_cards_game, get_unguessed_cards
 from src.database.models import Game, Player, Team, Card
 from src.database.schemas.game import ReturnGames, ReturnGame
+from src.app.exceptions.wrongplayer import WrongPlayerException
 
 
 async def logic_get_all_games(database: AsyncSession) -> ReturnGames:
@@ -73,8 +74,7 @@ async def logic_next_round(database: AsyncSession, game: Game, player: Player) -
             else:
                 await start_next_round(database, game)
     else:
-        current_team: Team = game.teams[game.next_team_index]
-        current_player: Player = current_team.players[current_team.next_player_index]
-        if current_player != player:
-            return
+        myturn: bool = await logic_get_your_turn(database, game.game_id, player)
+        if not myturn:
+            raise WrongPlayerException
         await next_player(database, game)
