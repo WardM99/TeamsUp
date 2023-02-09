@@ -197,6 +197,55 @@ async def test_logic_next_round_not_your_turn(database_with_data: AsyncSession):
         await logic_next_round(database_with_data, game, player)
 
 
+async def test_logic_next_round_your_turn(database_with_data: AsyncSession):
+    """Test the logic_next_round function when it's not the player's turn"""
+    owner: Player = Player(name="testuser", password="test")
+    database_with_data.add(owner)
+    await database_with_data.commit()
+    new_game = await logic_make_new_game(database_with_data, owner)
+    game: Game = await logic_get_game_by_id(new_game.game_id, database_with_data)
+    
+    
+    team1: Team = await create_team(database_with_data, "Team1", game)
+    team2: Team = await create_team(database_with_data, "Team2", game)
+
+    player = Player(name="testuser2", password="test")
+    database_with_data.add(player)
+    await database_with_data.commit()
+    
+    await add_player(database_with_data, team1, owner)
+    await add_player(database_with_data, team2, player)
+
+    await logic_next_round(database_with_data, game, owner)
+    topics = [
+        "astronomy",
+        "telephone",
+        "astronomy",
+        "royalty",
+        "monkeys",
+        "pipe organs",
+        "pilots",
+        "football",
+        "volcanoes",
+    ]
+    for topic in topics:
+        card: Card = Card(points=10, topic=topic)
+        database_with_data.add(card)
+        await database_with_data.commit()
+        await logic_add_card_to_game(database_with_data, game, card.card_id)
+
+    await logic_next_round(database_with_data, game, owner)
+    assert game.game_started
+    
+    await logic_next_round(database_with_data, game, owner)
+    turn_owner: bool = await logic_get_your_turn(database_with_data, game.game_id, owner)
+    turn_player: bool = await logic_get_your_turn(database_with_data, game.game_id, player)
+
+    assert not turn_owner
+    assert turn_player
+
+
+
 async def test_logic_next_round_game_not_started(database_with_data: AsyncSession):
     """Test the logic_next_round function when the game has not been started"""
     owner: Player = Player(name="testuser", password="test")
