@@ -65,20 +65,20 @@ async def logic_get_your_turn(database: AsyncSession, game_id: int|None, player:
 
 
 async def logic_next_round(database: AsyncSession, game: Game, player: Player) -> None:
-    """goed to the next round"""
+    """go to the next round"""
     cards: list[Card] = await get_unguessed_cards(database, game)
-
+    print(cards)
     if len(cards) == 0:
-        if player == game.owner:
+        if player.player_id == game.owner.player_id:
             await reset_cards_game(database, game)
-            if not game.may_suggests_cards and not game.round_one_done:
+            if not game.may_suggests_cards and not game.game_started:
                 await start_suggests_cards(database, game)
             else:
                 await start_next_round(database, game)
         else:
             raise WrongPlayerException
-    elif not game.game_started and len(cards) > 0 and player == game.owner:
-        await start_next_round(database,game)
+    elif not game.game_started and len(cards) > 0 and player.player_id == game.owner.player_id:
+        await start_next_round(database, game)
     elif game.game_started and len(cards) > 0:
         myturn: bool = await logic_get_your_turn(database, game.game_id, player)
         if not myturn:
