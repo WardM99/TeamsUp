@@ -25,14 +25,16 @@ function GameLobby(props: Props) {
   const [teams, setTeams] = useState<Teams>();
   const [cards, setCards] = useState<Cards>();
   const [game, setGame] = useState<Game>();
-  const [buttonText, setButtonText] = useState<string>("Start suggesting Cards");
+  const [buttonText, setButtonText] = useState<string>(
+    "Start suggesting cards"
+  );
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
-  if(game !== undefined && game.owner.playerId === props.player?.playerId && buttonDisabled){
+  if (game?.owner?.playerId === props.player?.playerId && buttonDisabled) {
     setButtonDisabled(false);
   }
 
-  if(game !== undefined && game.maySuggestsCards && buttonText !== "Start game"){
+  if (game?.maySuggestsCards && buttonText !== "Start game") {
     setButtonText("Start game");
   }
 
@@ -54,7 +56,6 @@ function GameLobby(props: Props) {
     getTeamsApi();
     getCardsApi();
     getGameApi();
-    console.log("TEST");
     // eslint-disable-next-line
   }, [gameId]);
   return (
