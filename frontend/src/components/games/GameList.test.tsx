@@ -11,6 +11,7 @@ jest.mock("../../utils/api/games", () => {
     roundTwoDone: false,
     roundThreeDone: false,
     maySuggestsCards: false,
+    gameStarted: true,
     owner: {
       playerId: 1,
       name: "Alice",
@@ -24,6 +25,7 @@ jest.mock("../../utils/api/games", () => {
     roundTwoDone: false,
     roundThreeDone: false,
     maySuggestsCards: false,
+    gameStarted: false,
     owner: {
       playerId: 2,
       name: "Bob",

@@ -10,6 +10,7 @@ class ReturnGame(OrmModel):
     round_two_done: bool
     round_three_done: bool
     may_suggests_cards: bool
+    game_started: bool
     owner: ReturnPlayer
     teams: list[ReturnTeam]
 

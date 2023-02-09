@@ -7,6 +7,7 @@ export interface Game {
   roundTwoDone: boolean;
   roundThreeDone: boolean;
   maySuggestsCards: boolean;
+  gameStarted: boolean;
   owner: Player;
   teams: Team[];
 }

@@ -37,6 +37,7 @@ const game: Game = {
   roundOneDone: false,
   roundTwoDone: false,
   roundThreeDone: false,
+  gameStarted: false,
   owner,
   teams: [team1, team2],
 };
