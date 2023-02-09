@@ -58,7 +58,8 @@ async def next_status(database: AsyncSession = Depends(get_session),
     await logic_next_round(database, game, player)
 
 
-@games_router.get("/{game_id}", status_code=status.HTTP_200_OK, response_model=ReturnGameStatus)
+@games_router.get("/{game_id}", status_code=status.HTTP_200_OK, response_model=ReturnGameStatus
+                  ,dependencies=[Depends(require_player)])
 async def get_game_status(game_id: int, database: AsyncSession = Depends(get_session)):
     """Gives the game status"""
     game: Game = await logic_get_game_by_id(game_id, database)

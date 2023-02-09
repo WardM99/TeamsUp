@@ -12,6 +12,7 @@ from src.database.crud.team import get_all_teams_from_game
 from src.database.crud.card import reset_cards_game, get_unguessed_cards
 from src.database.models import Game, Player, Team, Card
 from src.database.schemas.game import ReturnGames, ReturnGame
+from src.app.exceptions.wrongplayer import WrongPlayerException
 
 
 async def logic_get_all_games(database: AsyncSession) -> ReturnGames:
@@ -26,6 +27,7 @@ async def logic_get_all_games(database: AsyncSession) -> ReturnGames:
                                 round_two_done=game.round_two_done,
                                 round_three_done=game.round_three_done,
                                 may_suggests_cards=game.may_suggests_cards,
+                                game_started=game.game_started,
                                 owner=game.owner,
                                 teams=teams)
         all_return_games.append(return_game)
@@ -41,6 +43,7 @@ async def logic_make_new_game(database: AsyncSession, owner: Player) -> ReturnGa
                                 round_two_done=game.round_two_done,
                                 round_three_done=game.round_three_done,
                                 may_suggests_cards=game.may_suggests_cards,
+                                game_started=game.game_started,
                                 owner=game.owner,
                                 teams=[])
     return return_game
@@ -62,19 +65,24 @@ async def logic_get_your_turn(database: AsyncSession, game_id: int|None, player:
 
 
 async def logic_next_round(database: AsyncSession, game: Game, player: Player) -> None:
-    """goed to the next round"""
+    """go to the next round"""
     cards: list[Card] = await get_unguessed_cards(database, game)
-
+    print(cards)
     if len(cards) == 0:
-        if player == game.owner:
+        if player.player_id == game.owner.player_id:
             await reset_cards_game(database, game)
-            if not game.may_suggests_cards and not game.round_one_done:
+            if not game.may_suggests_cards and not game.game_started:
                 await start_suggests_cards(database, game)
             else:
                 await start_next_round(database, game)
-    else:
-        current_team: Team = game.teams[game.next_team_index]
-        current_player: Player = current_team.players[current_team.next_player_index]
-        if current_player != player:
-            return
+        else:
+            raise WrongPlayerException
+    elif not game.game_started and len(cards) > 0 and player.player_id == game.owner.player_id:
+        await start_next_round(database, game)
+    elif game.game_started and len(cards) > 0:
+        myturn: bool = await logic_get_your_turn(database, game.game_id, player)
+        if not myturn:
+            raise WrongPlayerException
         await next_player(database, game)
+    else:
+        raise WrongPlayerException

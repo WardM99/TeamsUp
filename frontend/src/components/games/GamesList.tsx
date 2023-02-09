@@ -25,10 +25,8 @@ function GameList(props: Props) {
   }
 
   useEffect(() => {
-    if (games === undefined) {
-      getGamesFromApi();
-    }
-  });
+    getGamesFromApi();
+  }, [props.player]);
 
   return (
     <Container data-testid="ListGamesId">

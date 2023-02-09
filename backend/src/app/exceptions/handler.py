@@ -5,6 +5,8 @@ from sqlalchemy.exc import NoResultFound, IntegrityError
 from jose import ExpiredSignatureError, JWTError
 from starlette import status
 
+from src.app.exceptions.wrongplayer import WrongPlayerException
+
 def install_handlers(app: FastAPI): # pragma: no cover
     """Intall all custom exception handlers"""
 
@@ -34,6 +36,13 @@ def install_handlers(app: FastAPI): # pragma: no cover
 
     @app.exception_handler(JWTError)
     def jwt_error(_request: Request, _exception: JWTError):
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={"message": "You are not authorized for this"}
+        )
+
+    @app.exception_handler(WrongPlayerException)
+    def wrong_player_exception(_request: Request, _exception: WrongPlayerException):
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
             content={"message": "You are not authorized for this"}

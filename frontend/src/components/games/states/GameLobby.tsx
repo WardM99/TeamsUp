@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Teams } from "../../../data/interfaces/teams";
 import { getTeams, joinTeam } from "../../../utils/api/teams";
-import { addCardToGame, getCards } from "../../../utils/api/cards";
+import { getCards } from "../../../utils/api/cards";
 
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
-import Carousel from "react-bootstrap/Carousel";
 import { Button } from "react-bootstrap";
 import { Player } from "../../../data/interfaces";
 import { Cards } from "../../../data/interfaces/cards";
-import { nextStatus } from "../../../utils/api/games";
+import { gameStatus, nextStatus } from "../../../utils/api/games";
+import CarouselComponent from "./CarouselComponent";
+import { Game } from "../../../data/interfaces/games";
 
 interface Props {
   player: Player | undefined;
@@ -23,6 +24,19 @@ function GameLobby(props: Props) {
   const { gameId } = useParams();
   const [teams, setTeams] = useState<Teams>();
   const [cards, setCards] = useState<Cards>();
+  const [game, setGame] = useState<Game>();
+  const [buttonText, setButtonText] = useState<string>(
+    "Start suggesting cards"
+  );
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
+
+  if (game?.owner?.playerId === props.player?.playerId && buttonDisabled) {
+    setButtonDisabled(false);
+  }
+
+  if (game?.maySuggestsCards && buttonText !== "Start game") {
+    setButtonText("Start game");
+  }
 
   async function getTeamsApi() {
     const response = await getTeams(Number(gameId));
@@ -34,10 +48,16 @@ function GameLobby(props: Props) {
     setCards(response);
   }
 
+  async function getGameApi() {
+    const response = await gameStatus(Number(gameId));
+    setGame(response);
+  }
   useEffect(() => {
-    if (teams === undefined) getTeamsApi();
-    if (cards === undefined) getCardsApi();
-  });
+    getTeamsApi();
+    getCardsApi();
+    getGameApi();
+    // eslint-disable-next-line
+  }, [gameId]);
   return (
     <Container data-testid="GameLobby">
       <Row>
@@ -54,20 +74,18 @@ function GameLobby(props: Props) {
                 <Card.Header>{team.teamName}</Card.Header>
                 <Card.Body>
                   <Card.Title>Members</Card.Title>
-                  <Card.Text>
-                    <ListGroup>
-                      {team?.players.map((player) => {
-                        return (
-                          <ListGroup.Item
-                            key={`ListGroupItem${player.playerId}`}
-                            data-testid={`ListGroupItem${player.playerId}`}
-                          >
-                            {player.name}
-                          </ListGroup.Item>
-                        );
-                      })}
-                    </ListGroup>
-                  </Card.Text>
+                  <ListGroup>
+                    {team?.players.map((player) => {
+                      return (
+                        <ListGroup.Item
+                          key={`ListGroupItem${player.playerId}`}
+                          data-testid={`ListGroupItem${player.playerId}`}
+                        >
+                          {player.name}
+                        </ListGroup.Item>
+                      );
+                    })}
+                  </ListGroup>
                 </Card.Body>
                 <Card.Footer>
                   <Button
@@ -92,41 +110,15 @@ function GameLobby(props: Props) {
             onClick={() => {
               nextStatus(Number(gameId));
             }}
+            disabled={buttonDisabled}
           >
-            Start suggesting cards
+            {buttonText}
           </Button>
         </Col>
       </Row>
       <Row>
         <Col>
-          <Carousel variant="dark">
-            {cards?.cards.map((card) => {
-              return (
-                <Carousel.Item>
-                  <Card
-                    key={`CardCardId${card.cardId}`}
-                    className="text-center"
-                  >
-                    <Card.Body>
-                      <Card.Title>{card.topic}</Card.Title>
-                      <Card.Text>Points: {card.points}</Card.Text>
-                      <Card.Footer>
-                        <Button
-                          onClick={() => {
-                            addCardToGame(Number(gameId), card.cardId);
-                          }}
-                        >
-                          Add
-                        </Button>
-                      </Card.Footer>
-                    </Card.Body>
-                  </Card>
-                  <br />
-                  <br />
-                </Carousel.Item>
-              );
-            })}
-          </Carousel>
+          <CarouselComponent cards={cards} gameId={Number(gameId)} />
         </Col>
       </Row>
     </Container>

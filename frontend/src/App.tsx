@@ -1,47 +1,35 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import PlayersLogin from "./components/players/PlayersLogin";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PlayersCreate from "./components/players/PlayersCreate";
 import "bootstrap/dist/css/bootstrap.min.css";
 import GameLobby from "./components/games/states/GameLobby";
 import NavBar from "./components/home/NavBar";
 import { Player } from "./data/interfaces";
 import { currentPlayer } from "./utils/api/player";
-import GameList from "./components/games/GamesList";
+import Homescreen from "./views/Homescreen";
 
 function App() {
   const [player, setPlayer] = useState<Player>();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-
   async function getPlayerApi() {
-    if (player === undefined) {
-      const response = await currentPlayer();
-      if (response !== undefined) {
-        setPlayer(response);
-        setIsLoggedIn(true);
-      }
+    const response = await currentPlayer();
+    if (response !== undefined) {
+      setPlayer(response);
+      setIsLoggedIn(true);
     } else {
-      const response = await currentPlayer();
-      if (response === undefined) {
-        setIsLoggedIn(false);
-      } else if (response.playerId !== player.playerId) {
-        setPlayer(response);
-        setIsLoggedIn(true);
-        navigate("/");
-      }
+      // response failed
+      setPlayer(undefined);
+      setIsLoggedIn(false);
     }
   }
 
   useEffect(() => {
     getPlayerApi();
-  });
-
-  if (!isLoggedIn) {
-    return <PlayersLogin setIsLoggedIn={setIsLoggedIn} />;
-  }
+    // eslint-disable-next-line
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -59,7 +47,10 @@ function App() {
           path="/register"
           element={<PlayersCreate setIsLoggedIn={setIsLoggedIn} />}
         />
-        <Route path="/" element={<GameList player={player} />} />
+        <Route
+          path="/"
+          element={<Homescreen player={player} isLoggedIn={isLoggedIn} />}
+        />
         <Route path="/game/:gameId" element={<GameLobby player={player} />} />
       </Routes>
     </>

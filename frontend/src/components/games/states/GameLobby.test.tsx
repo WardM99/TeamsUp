@@ -4,7 +4,8 @@ import GameLobby from "./GameLobby";
 import { Team } from "../../../data/interfaces/teams";
 import { Player } from "../../../data/interfaces";
 import { getTeams, joinTeam } from "../../../utils/api/teams";
-import { nextStatus } from "../../../utils/api/games";
+import { gameStatus, nextStatus } from "../../../utils/api/games";
+import { Game } from "../../../data/interfaces/games";
 
 const team1: Team = {
   teamId: 1,
@@ -18,25 +19,29 @@ const player: Player = {
   name: "Jos",
 };
 
+const owner: Player = {
+  playerId: 3,
+  name: "Jane",
+};
+
 const team2: Team = {
   teamId: 2,
   gameId: 2,
   teamName: "team 2",
   players: [player],
 };
-/*
+
 const game: Game = {
-    gameId: 2,
-    roundOneDone: false,
-    roundTwoDone: true,
-    roundThreeDone: false,
-    owner: {
-      playerId: 3,
-      name: "Jane",
-    },
-    teams: [team1, team2],
+  gameId: 2,
+  maySuggestsCards: false,
+  roundOneDone: false,
+  roundTwoDone: false,
+  roundThreeDone: false,
+  gameStarted: false,
+  owner,
+  teams: [team1, team2],
 };
-*/
+
 jest.mock("../../../utils/api/teams", () => ({
   getTeams: jest.fn(() => Promise.resolve({ teams: [team1, team2] })),
   joinTeam: jest.fn(),
@@ -48,6 +53,7 @@ jest.mock("../../../utils/api/cards", () => ({
 }));
 
 jest.mock("../../../utils/api/games", () => ({
+  gameStatus: jest.fn(() => Promise.resolve(game)),
   nextStatus: jest.fn(),
 }));
 
@@ -56,6 +62,9 @@ const props = {
 };
 
 describe("GameLobby", () => {
+  beforeEach(() => {
+    props.player = player;
+  });
   it("should render the teams", async () => {
     render(<GameLobby {...props} />);
     expect(getTeams).toBeCalledTimes(1);
@@ -87,12 +96,30 @@ describe("GameLobby", () => {
       // expect(joinTeam).toBeCalledWith(2,1)
     });
   });
-  it("should verify that the nextStatus function is called with the correct parameters when button is clicked", async () => {
+  it("should verify that the nextStatus function is not called with the correct parameters when button is clicked", async () => {
     render(<GameLobby {...props} />);
     let button: HTMLElement;
     await waitFor(() => {
       button = screen.getByText("Start suggesting cards");
       expect(button).toBeInTheDocument();
+    })
+      .then(() => {
+        expect(button).toBeDisabled();
+      })
+      .then(() => {
+        fireEvent.click(button);
+        expect(nextStatus).not.toBeCalled();
+        // expect(nextStatus).toBeCalledWith(2);
+      });
+  });
+  it("should verify that the nextStatus function is called with the correct parameters when button is clicked, maySuggestCards is false", async () => {
+    props.player = owner;
+    render(<GameLobby {...props} />);
+    expect(gameStatus).toBeCalled();
+    let button: HTMLElement;
+    await waitFor(() => {
+      button = screen.getByText("Start suggesting cards");
+      expect(button).not.toBeDisabled();
     }).then(() => {
       fireEvent.click(button);
       expect(nextStatus).toBeCalledTimes(1);
