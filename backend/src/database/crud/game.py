@@ -55,8 +55,10 @@ async def next_player(database: AsyncSession, game: Game) -> None:
 
 async def start_next_round(database: AsyncSession, game: Game) -> None:
     """Starts the next round of a game"""
-    if not game.round_one_done:
+    if game.may_suggests_cards:
+        game.game_started = True
         game.may_suggests_cards = False
+    elif not game.round_one_done:
         game.round_one_done = True
     elif not game.round_two_done:
         game.round_two_done = True

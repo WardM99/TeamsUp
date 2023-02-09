@@ -55,6 +55,7 @@ class Game(Base):
 
     game_id = Column(Integer, primary_key=True, index=True)
     owner_id = Column(Integer, ForeignKey("players.player_id"))
+    game_started: bool = Column(Boolean, nullable=False, default=False)
     may_suggests_cards: bool = Column(Boolean, nullable=False, default=False)
     round_one_done: bool = Column(Boolean, nullable=False, default=False)
     round_two_done: bool = Column(Boolean, nullable=False, default=False)

@@ -31,6 +31,7 @@ def upgrade() -> None:
     sa.Column('game_id', sa.Integer(), nullable=False),
     sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.Column('may_suggests_cards', sa.Boolean(), nullable=False),
+    sa.Column('game_started', sa.Boolean(), nullable=False),
     sa.Column('round_one_done', sa.Boolean(), nullable=False),
     sa.Column('round_two_done', sa.Boolean(), nullable=False),
     sa.Column('round_three_done', sa.Boolean(), nullable=False),
