@@ -44,7 +44,7 @@ async def test_get_all_games(database_with_data: AsyncSession, auth_client: Auth
         assert not game["roundTwoDone"]
         assert not game["roundThreeDone"]
         assert len(game["teams"]) == 2
-    
+
 
 async def test_make_a_new_game(database_with_data: AsyncSession, auth_client: AuthClient):
     """Test to make a new game"""

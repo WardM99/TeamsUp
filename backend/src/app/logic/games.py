@@ -27,6 +27,7 @@ async def logic_get_all_games(database: AsyncSession) -> ReturnGames:
                                 round_two_done=game.round_two_done,
                                 round_three_done=game.round_three_done,
                                 may_suggests_cards=game.may_suggests_cards,
+                                game_started=game.game_started,
                                 owner=game.owner,
                                 teams=teams)
         all_return_games.append(return_game)
@@ -42,6 +43,7 @@ async def logic_make_new_game(database: AsyncSession, owner: Player) -> ReturnGa
                                 round_two_done=game.round_two_done,
                                 round_three_done=game.round_three_done,
                                 may_suggests_cards=game.may_suggests_cards,
+                                game_started=game.game_started,
                                 owner=game.owner,
                                 teams=[])
     return return_game
