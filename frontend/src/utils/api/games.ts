@@ -51,3 +51,17 @@ export async function gameStatus(gameId: Number): Promise<Game | undefined> {
     return undefined;
   }
 }
+
+export async function getMyTurn(gameId: Number): Promise<boolean> {
+  try {
+    const config = getHeaders();
+    const response = await axiosInstance.get(`/games/${gameId}/myturn`, config);
+    if(response.status === 200) {
+      const myturn = response.data.yourTurn;
+      return myturn;
+    }
+    return false;
+  } catch(error) {
+    return false;
+  }
+}

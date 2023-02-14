@@ -8,11 +8,11 @@ from src.app.logic.players import require_player
 from src.app.logic.games import logic_get_game_by_id, logic_get_your_turn
 from src.app.logic.cards import logic_add_card_to_game, logic_get_random_card, logic_update_card
 from src.database.models import Game, Player
-from src.database.schemas.card import InputCard
+from src.database.schemas.card import InputCard, ReturnCard
 
 card_router = APIRouter(prefix="/cards")
 
-@card_router.get("")
+@card_router.get("", response_model=ReturnCard)
 async def get_next_card(
                         database: AsyncSession = Depends(get_session),
                         game: Game = Depends(logic_get_game_by_id),
@@ -38,7 +38,7 @@ async def correct_card(card_id: int,
                        game: Game = Depends(logic_get_game_by_id),
                        player: Player = Depends(require_player)):
     """Card is guessed correctly"""
-    if await logic_get_your_turn(database, game.game_id, player):
+    if await logic_get_your_turn(database, game.game_id, player):   
         await logic_update_card(database, game, card_id)
 
 

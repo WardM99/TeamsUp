@@ -59,6 +59,7 @@ jest.mock("../../../utils/api/games", () => ({
 
 const props = {
   player,
+  game,
 };
 
 describe("GameLobby", () => {
@@ -115,7 +116,6 @@ describe("GameLobby", () => {
   it("should verify that the nextStatus function is called with the correct parameters when button is clicked, maySuggestCards is false", async () => {
     props.player = owner;
     render(<GameLobby {...props} />);
-    expect(gameStatus).toBeCalled();
     let button: HTMLElement;
     await waitFor(() => {
       button = screen.getByText("Start suggesting cards");

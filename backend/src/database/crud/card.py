@@ -6,6 +6,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.models import Card, Game, card_games
+from src.app.exceptions.nomorecards import NoMoreCardsException
 
 
 async def get_card_by_id(database: AsyncSession, card_id: int) -> Card:
@@ -23,16 +24,15 @@ async def add_card_to_game(database: AsyncSession, card: Card, game: Game) -> No
 
 async def get_random_card(database: AsyncSession, game: Game)-> Card:
     """Get a random card that isn't guessed"""
-    query = select(card_games.columns.card_id)\
-        .where(card_games.columns.game_id == game.game_id)\
-        .where(card_games.columns.guessed == False)
-    result = await database.execute(query)
-    card_ids = result.unique().scalars().all()
-    return await get_card_by_id(database, choice(card_ids))
+    unguessed_card_ids = await get_unguessed_cards(database, game)
+    if not unguessed_card_ids:
+        raise NoMoreCardsException
+    return await get_card_by_id(database, choice(unguessed_card_ids))
 
 
 async def update_card(database: AsyncSession, game: Game, card: Card) -> None:
     """Update a specific card to the opposite value"""
+    print(card)
     query_select = select(card_games.columns.guessed)\
         .where(card_games.columns.game_id == game.game_id)\
         .where(card_games.columns.card_id == card.card_id)
@@ -43,6 +43,7 @@ async def update_card(database: AsyncSession, game: Game, card: Card) -> None:
             .where(card_games.columns.game_id == game.game_id)\
             .values(guessed = not value)
     await database.execute(query_update)
+    await database.commit()
 
 
 async def reset_cards_game(database: AsyncSession, game: Game) -> None:
@@ -51,6 +52,7 @@ async def reset_cards_game(database: AsyncSession, game: Game) -> None:
             .where(card_games.columns.game_id == game.game_id)\
             .values(guessed = False)
     await database.execute(query)
+    await database.commit()
 
 
 async def get_unguessed_cards(database: AsyncSession, game: Game) -> list[Card]:
@@ -73,7 +75,7 @@ async def get_cards(database: AsyncSession) -> list[Card]:
 
 async def add_cards_to_database(database: AsyncSession) -> None:
     """add a bunch of cards to the database"""
-    topics = [
+    topics = set([
         "astronomy",
         "telephone",
         "astronomy",
@@ -124,10 +126,10 @@ async def add_cards_to_database(database: AsyncSession) -> None:
         "coffee",
         "dogs",
         "crime"
-    ]
+    ])
     print("ADDING CARDS")
-    for i in range(50):
-        card: Card = Card(points=randint(1,10), topic=topics[i])
+    for topic in topics:
+        card: Card = Card(points=randint(1,10), topic=topic)
         database.add(card)
         await database.commit()
     print("CARDS ADDED")
