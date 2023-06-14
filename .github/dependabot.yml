@@ -7,10 +7,13 @@ version: 2
 updates:
   - package-ecosystem: "pip" # See documentation for possible values
     directory: "/backend" # Location of package manifests
+    open-pull-requests-limit: 100
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "wednesday"
   - package-ecosystem: npm
     directory: "/frontend"
     open-pull-requests-limit: 100
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "wednesday"
