@@ -20,16 +20,15 @@ async def logic_get_all_games(database: AsyncSession) -> ReturnGames:
     all_games: list[Game] = await get_all_games(database)
     all_return_games: list[ReturnGame] = []
     for game in all_games:
-        teams = await get_all_teams_from_game(database, game)
-
+        teams: list[Team] = await get_all_teams_from_game(database, game)
         return_game: ReturnGame = ReturnGame(game_id=game.game_id,
                                 round_one_done=game.round_one_done,
                                 round_two_done=game.round_two_done,
                                 round_three_done=game.round_three_done,
                                 may_suggests_cards=game.may_suggests_cards,
                                 game_started=game.game_started,
-                                owner=game.owner,
-                                teams=teams)
+                                owner=game.owner, # type: ignore
+                                teams=teams) # type: ignore
         all_return_games.append(return_game)
     return_games: ReturnGames = ReturnGames(games=all_return_games)
     return return_games
@@ -44,7 +43,7 @@ async def logic_make_new_game(database: AsyncSession, owner: Player) -> ReturnGa
                                 round_three_done=game.round_three_done,
                                 may_suggests_cards=game.may_suggests_cards,
                                 game_started=game.game_started,
-                                owner=game.owner,
+                                owner=game.owner, # type: ignore
                                 teams=[])
     return return_game
 

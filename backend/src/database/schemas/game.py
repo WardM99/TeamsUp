@@ -5,7 +5,7 @@ from src.database.schemas.team import ReturnTeam
 
 class ReturnGame(OrmModel):
     """Represents a game"""
-    game_id: int
+    game_id: int | None
     round_one_done: bool
     round_two_done: bool
     round_three_done: bool
@@ -16,7 +16,7 @@ class ReturnGame(OrmModel):
 
 class ReturnGameStatus(OrmModel):
     """Represents the game statuses"""
-    game_id: int
+    game_id: int | None
     round_one_done: bool
     round_two_done: bool
     round_three_done: bool

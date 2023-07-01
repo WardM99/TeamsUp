@@ -74,5 +74,5 @@ async def add_cards(database: AsyncSession = Depends(get_session)): # pragma: no
          ,dependencies=[Depends(require_player)])
 async def get_cards(database: AsyncSession = Depends(get_session)): # pragma: no cover
     """return cards"""
-    card_list = ReturnCardList(cards=await logic_get_cards(database))
+    card_list = ReturnCardList(cards=await logic_get_cards(database)) # type: ignore
     return card_list

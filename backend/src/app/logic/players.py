@@ -32,7 +32,7 @@ async def logic_generate_token(player: Player) -> Token:
     return Token(
         access_token=access_token,
         token_type="bearer",
-        player=player
+        player=player # type: ignore
     )
 
 
