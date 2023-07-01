@@ -4,11 +4,11 @@ import PlayersLogin from "./components/players/PlayersLogin";
 import { Route, Routes } from "react-router-dom";
 import PlayersCreate from "./components/players/PlayersCreate";
 import "bootstrap/dist/css/bootstrap.min.css";
-import GameLobby from "./components/games/states/GameLobby";
 import NavBar from "./components/home/NavBar";
 import { Player } from "./data/interfaces";
 import { currentPlayer } from "./utils/api/player";
 import Homescreen from "./views/Homescreen";
+import Gamescreen from "./views/Gamescreen";
 
 function App() {
   const [player, setPlayer] = useState<Player>();
@@ -51,7 +51,7 @@ function App() {
           path="/"
           element={<Homescreen player={player} isLoggedIn={isLoggedIn} />}
         />
-        <Route path="/game/:gameId" element={<GameLobby player={player} />} />
+        <Route path="/game/:gameId" element={<Gamescreen player={player} />} />
       </Routes>
     </>
   );

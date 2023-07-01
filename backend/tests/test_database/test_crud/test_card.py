@@ -36,19 +36,18 @@ async def database_with_data(database_session: AsyncSession):
 async def test_get_random_card(database_with_data: AsyncSession):
     """To get a card from the game that isn't guessed"""
     game = await get_game(database_with_data, 1)
+    unguessed_cards: list[Card] = await get_unguessed_cards(database_with_data, game)
+    assert len(unguessed_cards) == 10
     for _ in range(4):
         card = await get_random_card(database_with_data, game)
         await update_card(database_with_data, game, card)
-    query = select(card_games.columns.card_id).where(card_games.columns.game_id == game.game_id).where(card_games.columns.guessed == False)
-    result = await database_with_data.execute(query)
-    value = result.unique().scalars().all()
-    assert len(value) == 6
+    
+    unguessed_cards: list[Card] = await get_unguessed_cards(database_with_data, game)
+    assert len(unguessed_cards) == 6
 
     await reset_cards_game(database_with_data, game)
-    query = select(card_games.columns.card_id).where(card_games.columns.game_id == game.game_id).where(card_games.columns.guessed == False)
-    result = await database_with_data.execute(query)
-    value = result.unique().scalars().all()
-    assert len(value) == 10
+    unguessed_cards: list[Card] = await get_unguessed_cards(database_with_data, game)
+    assert len(unguessed_cards) == 10
 
 
 async def test_add_card_to_game(database_with_data: AsyncSession):

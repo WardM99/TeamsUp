@@ -12,29 +12,29 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { Button } from "react-bootstrap";
 import { Player } from "../../../data/interfaces";
 import { Cards } from "../../../data/interfaces/cards";
-import { gameStatus, nextStatus } from "../../../utils/api/games";
+import { nextStatus } from "../../../utils/api/games";
 import CarouselComponent from "./CarouselComponent";
 import { Game } from "../../../data/interfaces/games";
 
 interface Props {
   player: Player | undefined;
+  game: Game | undefined;
 }
 
 function GameLobby(props: Props) {
   const { gameId } = useParams();
   const [teams, setTeams] = useState<Teams>();
   const [cards, setCards] = useState<Cards>();
-  const [game, setGame] = useState<Game>();
   const [buttonText, setButtonText] = useState<string>(
     "Start suggesting cards"
   );
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
-  if (game?.owner?.playerId === props.player?.playerId && buttonDisabled) {
+  if (props.game?.owner?.playerId === props.player?.playerId && buttonDisabled) {
     setButtonDisabled(false);
   }
 
-  if (game?.maySuggestsCards && buttonText !== "Start game") {
+  if (props.game?.maySuggestsCards && buttonText !== "Start game") {
     setButtonText("Start game");
   }
 
@@ -47,15 +47,9 @@ function GameLobby(props: Props) {
     const response = await getCards();
     setCards(response);
   }
-
-  async function getGameApi() {
-    const response = await gameStatus(Number(gameId));
-    setGame(response);
-  }
   useEffect(() => {
     getTeamsApi();
     getCardsApi();
-    getGameApi();
     // eslint-disable-next-line
   }, [gameId]);
   return (

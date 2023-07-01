@@ -48,8 +48,8 @@ async def next_player(database: AsyncSession, game: Game) -> None:
     """Set next player"""
     teams: list[Team] = await get_all_teams_from_game(database, game)
     team: Team = teams[game.next_team_index]
-    team.next_player_index = (team.next_player_index + 1) % (len(team.players) + 1)
-    game.next_team_index = (game.next_team_index + 1) % (len(team.players) + 1)
+    team.next_player_index = (team.next_player_index + 1) % (len(team.players))
+    game.next_team_index = (game.next_team_index + 1) % (len(game.teams))
     await database.commit()
 
 

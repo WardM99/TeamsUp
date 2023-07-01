@@ -6,6 +6,7 @@ from jose import ExpiredSignatureError, JWTError
 from starlette import status
 
 from src.app.exceptions.wrongplayer import WrongPlayerException
+from src.app.exceptions.nomorecards import NoMoreCardsException
 
 def install_handlers(app: FastAPI): # pragma: no cover
     """Intall all custom exception handlers"""
@@ -44,6 +45,13 @@ def install_handlers(app: FastAPI): # pragma: no cover
     @app.exception_handler(WrongPlayerException)
     def wrong_player_exception(_request: Request, _exception: WrongPlayerException):
         return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            content={"message": "You are not authorized for this"}
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            content={"message": "It's not your turn"}
+        )
+
+    @app.exception_handler(NoMoreCardsException)
+    def no_more_cards_exception(_request: Request, _exception: NoMoreCardsException):
+        return JSONResponse(
+            status_code=status.HTTP_406_NOT_ACCEPTABLE,
+            content={"message": "There are no more cards"}
         )
