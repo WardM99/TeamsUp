@@ -22,7 +22,7 @@ async def get_teams(
     game: Game = Depends(logic_get_game_by_id)
 ):
     """Get all teams of a game"""
-    return ReturnTeams(teams=await logic_get_all_teams(database, game))
+    return ReturnTeams(teams=await logic_get_all_teams(database, game)) # type: ignore
 
 @teams_router.post("", response_model=ReturnTeam, status_code=status.HTTP_201_CREATED,
                    dependencies=[Depends(require_player)])
