@@ -26,7 +26,7 @@ environs = "^9.5.0"
 pytest = "^7.4.0"
 mypy = "^1.4"
 pylint = "^2.17.4"
-sqlalchemy2-stubs = "^0.0.2a34"
+sqlalchemy2-stubs = "^0.0.2a36"
 pytest-asyncio = "^0.21.0"
 
 [tool.mypy]
