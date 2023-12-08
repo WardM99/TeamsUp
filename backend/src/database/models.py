@@ -41,7 +41,9 @@ class Team(Base):
 
     next_player_index: int = Column(Integer, default=0)
 
-    game: Mapped[Game] = relationship("Game", back_populates="teams", uselist=False, lazy="selectin")
+    game: Mapped[Game] = relationship(
+        "Game", back_populates="teams", uselist=False, lazy="selectin"
+    )
     players: Mapped[list[Player]] = relationship(
         "Player",
         back_populates="current_team",
@@ -63,9 +65,13 @@ class Game(Base):
 
     next_team_index: int = Column(Integer, default=0)
 
-    teams: Mapped[list[Team]] = relationship("Team", back_populates="game", cascade="all, delete-orphan")
+    teams: Mapped[list[Team]] = relationship(
+        "Team", back_populates="game", cascade="all, delete-orphan"
+    )
 
-    cards: Mapped[list[Card]] = relationship("Card", secondary="card_games", back_populates="games")
+    cards: Mapped[list[Card]] = relationship(
+        "Card", secondary="card_games", back_populates="games"
+    )
     owner: Mapped[Player] = relationship(
         "Player",
         back_populates="owned_games",

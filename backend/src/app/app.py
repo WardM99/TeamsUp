@@ -1,6 +1,6 @@
 """Startup of FastAPI application"""
-from fastapi import FastAPI, Depends
 from contextlib import asynccontextmanager
+from fastapi import FastAPI, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -19,8 +19,8 @@ from src.database.schemas.card import ReturnCardList
 from .routers import games_router
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Load the ML model
+async def lifespan(_app: FastAPI):
+    """lifespan"""
     print("lifespan start")
     init_database()
     yield
