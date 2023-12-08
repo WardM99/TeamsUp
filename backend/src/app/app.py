@@ -19,7 +19,7 @@ from src.database.schemas.card import ReturnCardList
 from .routers import games_router
 
 @asynccontextmanager
-async def lifespan(_app: FastAPI):
+async def lifespan(_app: FastAPI): # pragma: no cover
     """lifespan"""
     print("lifespan start")
     init_database()
