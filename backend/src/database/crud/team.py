@@ -28,7 +28,7 @@ async def get_all_teams_from_game(database: AsyncSession, game: Game) -> list[Te
     """returns all games"""
     query = select(Team).where(Team.game == game).options(selectinload(Team.players))
     result = await database.execute(query)
-    return result.unique().scalars().all()
+    return list(result.unique().scalars().all())
 
 
 async def delete_team(database: AsyncSession, team: Team) -> None:

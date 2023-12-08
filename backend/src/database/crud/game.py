@@ -29,7 +29,7 @@ async def get_all_games(database: AsyncSession) -> list[Game]:
     """returns all games"""
     query = select(Game).options(selectinload(Game.cards))
     result = await database.execute(query)
-    return result.unique().scalars().all()
+    return list(result.unique().scalars().all())
 
 
 async def delete_game(database: AsyncSession, game: Game) -> None:

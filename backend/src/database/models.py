@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, Text, Table
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import declarative_base, relationship, Mapped
 
 Base = declarative_base()
 
@@ -16,13 +16,13 @@ class Player(Base):
     name: str = Column(Text, nullable=False, unique=True)
     password: str = Column(Text, nullable=False)
 
-    current_team: Team = relationship(
+    current_team: Mapped[Team] = relationship(
         "Team",
         back_populates="players",
         uselist=False,
         lazy="selectin"
     )
-    owned_games: list[Game] = relationship(
+    owned_games: Mapped[list[Game]] = relationship(
         "Game",
         back_populates="owner",
         cascade="all, delete-orphan"
@@ -41,8 +41,10 @@ class Team(Base):
 
     next_player_index: int = Column(Integer, default=0)
 
-    game: Game = relationship("Game", back_populates="teams", uselist=False, lazy="selectin")
-    players: list[Player] = relationship(
+    game: Mapped[Game] = relationship(
+        "Game", back_populates="teams", uselist=False, lazy="selectin"
+    )
+    players: Mapped[list[Player]] = relationship(
         "Player",
         back_populates="current_team",
         cascade="all, delete-orphan"
@@ -63,10 +65,14 @@ class Game(Base):
 
     next_team_index: int = Column(Integer, default=0)
 
-    teams: list[Team] = relationship("Team", back_populates="game", cascade="all, delete-orphan")
+    teams: Mapped[list[Team]] = relationship(
+        "Team", back_populates="game", cascade="all, delete-orphan"
+    )
 
-    cards: list[Card] = relationship("Card", secondary="card_games", back_populates="games")
-    owner: Player = relationship(
+    cards: Mapped[list[Card]] = relationship(
+        "Card", secondary="card_games", back_populates="games"
+    )
+    owner: Mapped[Player] = relationship(
         "Player",
         back_populates="owned_games",
         uselist=False,
@@ -82,7 +88,7 @@ class Card(Base):
     points: int = Column(Integer, nullable=False)
     topic: str = Column(Text, nullable=False)
 
-    games: list[Game] = relationship("Game", secondary="card_games", back_populates="cards")
+    games: Mapped[list[Game]] = relationship("Game", secondary="card_games", back_populates="cards")
 
 
 card_games = Table(

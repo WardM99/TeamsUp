@@ -1,4 +1,5 @@
 """Startup of FastAPI application"""
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -17,10 +18,19 @@ from src.app.logic.players import require_player
 from src.database.schemas.card import ReturnCardList
 from .routers import games_router
 
+@asynccontextmanager
+async def lifespan(_app: FastAPI): # pragma: no cover
+    """lifespan"""
+    print("lifespan start")
+    init_database()
+    yield
+    # Clean up the ML models and release the resources
+    print("lifespan end")
 
 app = FastAPI(
     title="TeamsUp",
-    version="0.0.1"
+    version="0.0.1",
+    lifespan=lifespan
 )
 env = Env()
 
@@ -44,7 +54,6 @@ app.include_router(games_router)
 app.include_router(players_router)
 
 
-@app.on_event('startup')
 async def init_database(): # pragma: no cover
     """Create all tables of database"""
     alembic_config: config.Config = config.Config('alembic.ini')

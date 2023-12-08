@@ -60,7 +60,7 @@ async def get_unguessed_cards(database: AsyncSession, game: Game) -> list[Card]:
         .where(card_games.columns.guessed == False)
     result = await database.execute(query)
     value = result.unique().scalars().all()
-    return value
+    return list(value)
 
 
 async def get_cards(database: AsyncSession) -> list[Card]:
@@ -68,7 +68,7 @@ async def get_cards(database: AsyncSession) -> list[Card]:
     query = select(Card)
     result = await database.execute(query)
     value = result.unique().scalars().all()
-    return value
+    return list(value)
 
 
 async def add_cards_to_database(database: AsyncSession) -> None:
