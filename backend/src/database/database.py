@@ -1,7 +1,7 @@
 """Code to make a database connection"""
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
 SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///database.db"
 
@@ -11,13 +11,7 @@ engine = create_async_engine(
 )
 
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine,
-    class_=AsyncSession,
-    expire_on_commit=False
-)
+SessionLocal = async_sessionmaker(engine)
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:  # pragma: no cover
