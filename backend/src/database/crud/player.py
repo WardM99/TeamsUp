@@ -6,6 +6,7 @@ from src.database.models import Player
 
 async def create_player(database: AsyncSession, name: str, password: str) -> Player:
     """Creates a new player"""
+    print(password)
     player: Player = Player(
         name=name,
         password=password
@@ -28,9 +29,9 @@ async def get_player_by_id(database: AsyncSession, player_id: int) -> Player:
     return result.unique().scalars().one()
 
 
-async def get_player_by_name_and_password(database: AsyncSession,
-                                          name: str, password: str) -> Player:
+async def get_player_by_name(database: AsyncSession,
+                             name: str) -> Player:
     """Return a player by login"""
-    query = select(Player).where(Player.name == name).where(Player.password == password)
+    query = select(Player).where(Player.name == name)
     result = await database.execute(query)
     return result.unique().scalars().one()
