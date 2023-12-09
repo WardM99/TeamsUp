@@ -6,6 +6,7 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
+from src.app.exceptions.wrongcredentials import WrongCredentialsException
 from src.database.crud.player import (create_player,
                                       get_player_by_id,
                                       get_player_by_name)
@@ -43,10 +44,14 @@ async def logic_get_player_by_name_and_password(database: AsyncSession,
                                                 name: str,
                                                 password: str) -> Player:
     """The logic to get a player by name and password"""
-    player: Player = await get_player_by_name(database, name)
-    if verify_password(password, player.password):
-        return player
-    raise NoResultFound
+    try:
+        player: Player = await get_player_by_name(database, name)
+
+        if verify_password(password, player.password):
+            return player
+        raise WrongCredentialsException
+    except NoResultFound as exc:
+        raise WrongCredentialsException from exc
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/players/login")
