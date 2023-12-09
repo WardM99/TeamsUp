@@ -5,13 +5,13 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import NoResultFound
 from src.database.crud.player import (create_player,
                                       get_player_by_id,
                                       get_player_by_name)
 from src.database.schemas.player import Token
 from src.database.database import get_session
 from src.database.models import Player
-from sqlalchemy.exc import NoResultFound
 
 # Configuration
 

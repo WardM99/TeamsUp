@@ -6,7 +6,6 @@ from src.database.models import Player
 
 async def create_player(database: AsyncSession, name: str, password: str) -> Player:
     """Creates a new player"""
-    print(password)
     player: Player = Player(
         name=name,
         password=password
