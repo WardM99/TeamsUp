@@ -31,7 +31,7 @@ describe("setAccessToken and getAccessToken", () => {
     // Assert
     expect(localStorage.setItem).toHaveBeenCalledWith(
       LocalStorageKey.ACCESS_TOKEN,
-      "abc"
+      "abc",
     );
     expect(result).toEqual("abc");
   });
@@ -47,7 +47,7 @@ describe("setAccessToken and getAccessToken", () => {
 
     // Assert
     expect(localStorage.removeItem).toHaveBeenCalledWith(
-      LocalStorageKey.ACCESS_TOKEN
+      LocalStorageKey.ACCESS_TOKEN,
     );
     expect(result).toBeNull();
   });
@@ -81,7 +81,7 @@ describe("setTokenType and getTokenType", () => {
     // Assert
     expect(localStorage.setItem).toHaveBeenCalledWith(
       LocalStorageKey.TOKEN_TYPE,
-      tokenType
+      tokenType,
     );
     expect(result).toEqual(tokenType);
   });
@@ -97,7 +97,7 @@ describe("setTokenType and getTokenType", () => {
 
     // Assert
     expect(localStorage.removeItem).toHaveBeenCalledWith(
-      LocalStorageKey.TOKEN_TYPE
+      LocalStorageKey.TOKEN_TYPE,
     );
     expect(result).toBeNull();
   });

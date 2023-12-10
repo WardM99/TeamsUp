@@ -17,14 +17,14 @@ export async function getTeams(gameId: number): Promise<Teams | undefined> {
 
 export async function createTeam(
   gameId: number,
-  teamName: string
+  teamName: string,
 ): Promise<Team | undefined> {
   try {
     const config = getHeaders();
     const response = await axiosInstance.post(
       `/games/${gameId}/teams`,
       { team_name: teamName },
-      config
+      config,
     );
     if (response.status === 200) {
       const team = response.data as Team;
@@ -38,14 +38,14 @@ export async function createTeam(
 
 export async function joinTeam(
   gameId: number,
-  teamId: number
+  teamId: number,
 ): Promise<Team | undefined> {
   try {
     const config = getHeaders();
     const response = await axiosInstance.post(
       `/games/${gameId}/teams/${teamId}`,
       {},
-      config
+      config,
     );
     if (response.status === 200) {
       const team = response.data as Team;

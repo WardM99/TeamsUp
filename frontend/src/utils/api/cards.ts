@@ -17,14 +17,14 @@ export async function getCards(): Promise<Cards | undefined> {
 
 export async function addCardToGame(
   gameId: number,
-  cardId: number
+  cardId: number,
 ): Promise<number> {
   try {
     const config = getHeaders();
     const response = await axiosInstance.post(
       `/games/${gameId}/cards`,
       { card_id: cardId },
-      config
+      config,
     );
     return response.status;
   } catch (error) {
