@@ -3,24 +3,28 @@ from datetime import timedelta, datetime
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
+from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import NoResultFound
+from src.app.exceptions.wrongcredentials import WrongCredentialsException
 from src.database.crud.player import (create_player,
                                       get_player_by_id,
-                                      get_player_by_name_and_password)
+                                      get_player_by_name)
 from src.database.schemas.player import Token
 from src.database.database import get_session
 from src.database.models import Player
 
-#async def logic_get_all_players(database: AsyncSession, team: Team) -> list[Player]:
-#    """The logic to get all players of a team"""
-#    return await get_players_team(database, team)
-#
-#
+# Configuration
+
+ALGORITHM = "HS256"
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
 async def logic_make_new_player(database: AsyncSession, name: str, password: str) -> Player:
     """The logic to create a new player"""
-    return await create_player(database, name, password)
-#
-#
+    return await create_player(database, name, pwd_context.hash(password))
+
+
 async def logic_get_player_by_id(database: AsyncSession, player_id: int) -> Player:
     """The logic to get a player by id"""
     return await get_player_by_id(database, player_id)
@@ -40,7 +44,13 @@ async def logic_get_player_by_name_and_password(database: AsyncSession,
                                                 name: str,
                                                 password: str) -> Player:
     """The logic to get a player by name and password"""
-    return await get_player_by_name_and_password(database, name, password)
+    try:
+        player: Player = await get_player_by_name(database, name)
+        if verify_password(password, player.password):
+            return player
+        raise WrongCredentialsException
+    except NoResultFound as exc:
+        raise WrongCredentialsException from exc
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/players/login")
@@ -61,7 +71,7 @@ async def get_user_from_access_token(
     database: AsyncSession = Depends(get_session),
     token: str = Depends(oauth2_scheme)
 ) -> Player:
-    """Test"""
+    """Get the user from an access token"""
     payload = jwt.decode(
         token,
         "WPll6MnvmR1NLf7x6jszNNXlQUwhqpKIyIUyQdg3zio7ngodp82FRbh1JM4UO5qZ",
@@ -78,5 +88,10 @@ async def get_user_from_access_token(
 
 
 async def require_player(player: Player = Depends(get_user_from_access_token)) -> Player:
-    """Test"""
+    """Require a player to be logged in"""
     return player
+
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """Verify that a password matches a hash found in the database"""
+    return pwd_context.verify(plain_password, hashed_password)

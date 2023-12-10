@@ -45,3 +45,21 @@ async def test_login(database_session: AsyncSession, auth_client: AuthClient):
     assert data["player"]["name"] == "New Player"
     assert data["token_type"] == "bearer"
     assert data["access_token"] is not None
+
+
+async def test_login_fail_wrong_password(database_session: AsyncSession, auth_client: AuthClient):
+    """Test to login fail"""
+    post_request = await auth_client.post("/players", json={"name": "New Player", "password": "Wachtwoord"})
+    assert post_request.status_code == status.HTTP_201_CREATED
+    login_request = await auth_client.post("/players/login", data={"username": "New Player", "password": "wachtwoord", "grant_type": "password"},
+                           headers={"content-type": "application/x-www-form-urlencoded"})
+    assert login_request.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+async def test_login_fail_wrong_username(database_session: AsyncSession, auth_client: AuthClient):
+    """Test to login fail"""
+    post_request = await auth_client.post("/players", json={"name": "New Player", "password": "Wachtwoord"})
+    assert post_request.status_code == status.HTTP_201_CREATED
+    login_request = await auth_client.post("/players/login", data={"username": "NewPlayer", "password": "Wachtwoord", "grant_type": "password"},
+                           headers={"content-type": "application/x-www-form-urlencoded"})
+    assert login_request.status_code == status.HTTP_401_UNAUTHORIZED
