@@ -46,7 +46,6 @@ async def logic_get_player_by_name_and_password(database: AsyncSession,
     """The logic to get a player by name and password"""
     try:
         player: Player = await get_player_by_name(database, name)
-
         if verify_password(password, player.password):
             return player
         raise WrongCredentialsException
