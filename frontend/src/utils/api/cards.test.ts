@@ -84,7 +84,7 @@ describe("addCardToGame", () => {
       },
       {
         headers: { Authorization: `bearer abc` },
-      }
+      },
     );
     expect(response).toEqual(204);
   });

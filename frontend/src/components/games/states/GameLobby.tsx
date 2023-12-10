@@ -26,7 +26,7 @@ function GameLobby(props: Props) {
   const [cards, setCards] = useState<Cards>();
   const [game, setGame] = useState<Game>();
   const [buttonText, setButtonText] = useState<string>(
-    "Start suggesting cards"
+    "Start suggesting cards",
   );
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 

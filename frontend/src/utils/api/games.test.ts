@@ -91,7 +91,7 @@ describe("createGame", () => {
       {},
       {
         headers: { Authorization: `bearer abc` },
-      }
+      },
     );
     expect(game).toEqual(mockResponse.data);
   });

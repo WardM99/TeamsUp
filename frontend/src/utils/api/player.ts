@@ -16,7 +16,7 @@ function setLogInTokens(response: LoginResponse) {
 
 export async function createPlayer(
   name: string,
-  password: string
+  password: string,
 ): Promise<number> {
   const payload = {
     name,
