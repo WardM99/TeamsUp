@@ -32,7 +32,7 @@ jobs:
         run: yarn install --prefer-offline
 
   Frontend-Test:
-    needs: [Dependencies]
+    needs: [Lint, Style]
     runs-on: ubuntu-latest
     container: node:16.14.0-bullseye-slim
     steps:
@@ -50,7 +50,7 @@ jobs:
       - run: yarn test
 
   Lint:
-    needs: [Frontend-Test]
+    needs: [Dependencies]
     runs-on: ubuntu-latest
     container: node:16.14.0-bullseye-slim
     steps:
@@ -68,7 +68,7 @@ jobs:
       - run: yarn lint
 
   Style:
-    needs: [Frontend-Test]
+    needs: [Dependencies]
     runs-on: ubuntu-latest
     container: node:16.14.0-bullseye-slim
     steps:
