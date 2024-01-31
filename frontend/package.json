@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.5",
-    "@babel/preset-env": "^7.22.5",
+    "@babel/preset-env": "^7.23.9",
     "babel-jest": "^29.5.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
